@@ -86,7 +86,7 @@ const Login = () => {
         {/* Right: Form */}
         <div className="w-full md:w-3/4 bg-white p-8">
           <h2 className="text-2xl font-semibold text-gray-700 mb-1">
-            Welcome to <span className="font-bold">NUVA</span>
+            Hi, Welcome back!
           </h2>
           <p className="text-sm text-gray-500 mb-6">
             Please log in to your account.
