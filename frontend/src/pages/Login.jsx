@@ -45,7 +45,13 @@ const Login = () => {
     }
 
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, formData);
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/auth/login`,
+        formData,
+        {
+          withCredentials: true, 
+        }
+      );
       const token = res.data.token;
 
       // Store token in localStorage
@@ -60,7 +66,7 @@ const Login = () => {
       });
 
       setTimeout(() => {
-        navigate("/");
+        navigate("/dashboard");
       }, 1500);
     } catch (error) {
       Swal.fire({

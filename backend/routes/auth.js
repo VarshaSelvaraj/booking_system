@@ -79,6 +79,13 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
       expiresIn: '2h',
     });
+    // Set cookie
+    res.cookie('token', token, {
+      httpOnly: true,     // Prevents JavaScript access (secure against XSS)
+      secure: process.env.NODE_ENV === 'production', // Set to true in production (HTTPS)
+      sameSite: 'Strict', // Protects against CSRF
+      maxAge: 2 * 60 * 60 * 1000 // 2 hours in ms
+    });
     console.log(token)
     res.json({ token });
   } catch (err) {
@@ -86,4 +93,12 @@ router.post('/login', async (req, res) => {
   }
 });
 
+router.post('/logout', (req, res) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Strict',
+  });
+  res.status(200).json({ message: 'Logged out successfully' });
+});
 module.exports = router;
