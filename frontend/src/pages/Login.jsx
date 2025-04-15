@@ -55,7 +55,7 @@ const Login = () => {
       const token = res.data.token;
 
       // Store token in localStorage
-      localStorage.setItem("token", token);
+
 
       Swal.fire({
         icon: "success",
@@ -153,7 +153,7 @@ const Login = () => {
 
               <button
                 type="submit"
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full text-base md:text-lg shadow-md transition duration-300"
+                className="w-full bg-violet-400 hover:bg-violet-500 text-white px-6 py-3 rounded-full text-base md:text-lg shadow-md transition duration-300"
               >
                 Log In
               </button>
@@ -162,7 +162,7 @@ const Login = () => {
             <p className="text-center mt-4 text-gray-600">
               Don’t have an account?{" "}
               <span
-                className="text-purple-600 cursor-pointer hover:underline"
+                className="text-violet-400 cursor-pointer hover:underline font-semibold"
                 onClick={() => navigate("/register")}
               >
                 Register here

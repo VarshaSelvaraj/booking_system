@@ -55,8 +55,8 @@ const Profile = () => {
             variants={textVariants}
           >
             <img
-              src="https://static.vecteezy.com/system/resources/previews/022/450/297/non_2x/3d-minimal-purple-user-profile-avatar-icon-in-circle-white-frame-design-vector.jpg" // Replace with actual profile image
-              alt="Profile Image"
+              src="https://via.placeholder.com/150"
+              alt='Profile'
               className="w-48 h-48 rounded-full object-cover shadow-md"
             />
           </motion.div>

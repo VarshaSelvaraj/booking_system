@@ -80,7 +80,7 @@ const HomePage = () => {
             >
               <Link to="/login">
                 <motion.button
-                  className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full text-base md:text-lg shadow-md transition duration-300"
+                  className="bg-violet-400 hover:bg-violet-500 text-white px-6 py-3 rounded-full text-base md:text-lg shadow-md transition duration-300"
                   variants={buttonVariants}
                 >
                   Log In
@@ -88,7 +88,8 @@ const HomePage = () => {
               </Link>
               <Link to="/register">
                 <motion.button
-                  className="border-2 border-purple-600 hover:bg-purple-50 text-purple-700 px-6 py-3 rounded-full text-base md:text-lg shadow-md transition duration-300"
+                  className="border-2 border-violet-400 hover:bg-violet-500 text-violet
+                  -700 px-6 py-3 rounded-full text-base md:text-lg shadow-md transition duration-300"
                   variants={buttonVariants}
                 >
                   Sign Up

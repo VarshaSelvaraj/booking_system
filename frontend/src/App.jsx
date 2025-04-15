@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import AllEvents from './pages/AllEvents';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
+import MyBookings from './pages/MyBookings';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/allevents" element={<AllEvents/>}/>
         <Route path="/dashboard" element={<Dashboard/>}/>
         <Route path="/profile" element={<Profile/>}/>
+        <Route path="/mybookings" element={<MyBookings />} /> {/* Redirect to Home for any other route */}
 
       </Routes>
     </Router>

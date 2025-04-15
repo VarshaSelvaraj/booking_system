@@ -222,7 +222,7 @@ const Register = () => {
 
               <button
                 type="submit"
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full text-base md:text-lg shadow-md transition duration-300"
+                className="w-full bg-violet-400 hover:bg-violet-500 text-white px-6 py-3 rounded-full text-base md:text-lg shadow-md transition duration-300"
               >
                 Register
               </button>
@@ -231,7 +231,7 @@ const Register = () => {
             <p className="text-center mt-4 text-gray-600">
               Already have an account?{" "}
               <span
-                className="text-purple-600 cursor-pointer hover:underline"
+                className="text-violet-500 cursor-pointer hover:underline font-semibold"
                 onClick={() => navigate("/login")}
               >
                 Login here
