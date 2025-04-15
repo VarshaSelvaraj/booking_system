@@ -25,35 +25,50 @@ router.get('/getevents', async (req, res) => {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 });
+
 router.post('/enroll', async (req, res) => {
   const { eventId } = req.body;
+  const userId = req.user.id;
+
   console.log('Received eventId:', eventId);
-  const userId = req.user.id; 
-  console.log('User  ID:', userId); // Log the user ID
+  console.log('User ID:', userId);
 
   try {
-    // Step 1: Check available slots for the event
+    // ✅ Step 1: Check if user already enrolled in this event
+    const { data: existingBooking, error: existingBookingError } = await supabase
+      .from('bookings')
+      .select('booking_id')
+      .eq('event_id', eventId)
+      .eq('user_id', userId)
+      .eq('booking_status', 'Confirmed')
+      .single();
+
+    if (existingBooking && !existingBookingError) {
+      return res.status(400).json({ message: 'You are already enrolled in this event' });
+    }
+
+    // ✅ Step 2: Fetch available slots and slots_booked
     const { data: eventData, error: eventError } = await supabase
       .from('events')
-      .select('available_slots')
+      .select('available_slots, slots_booked')
       .eq('id', eventId)
-      .single(); // Get a single event
+      .single();
 
     if (eventError || !eventData) {
       console.error('Event not found:', eventError ? eventError.message : 'No event data');
       return res.status(404).json({ message: 'Event not found' });
     }
 
-    // Step 2: Check if there are available slots
-    if (eventData.available_slots <= 0) {
+    // ✅ Step 3: Check if event is fully booked
+    if (eventData.slots_booked >= eventData.available_slots) {
       return res.status(400).json({ message: 'No available slots for this event' });
     }
 
-    // Step 3: Insert into the bookings table
+    // ✅ Step 4: Insert booking
     const { data: bookingData, error: bookingError } = await supabase
       .from('bookings')
-      .insert([{ 
-        event_id: eventId, 
+      .insert([{
+        event_id: eventId,
         user_id: userId,
         booking_date: new Date().toISOString(),
         booking_status: 'Confirmed'
@@ -64,16 +79,16 @@ router.post('/enroll', async (req, res) => {
       return res.status(500).json({ message: 'Failed to enroll in event', error: bookingError.message });
     }
 
-    // Step 4: Update available slots in the events table
-    const updatedSlots = eventData.available_slots - 1; // Deduct one slot
+    // ✅ Step 5: Increment slots_booked
+    const updatedSlotsBooked = eventData.slots_booked + 1;
     const { error: updateError } = await supabase
       .from('events')
-      .update({ available_slots: updatedSlots })
+      .update({ slots_booked: updatedSlotsBooked })
       .eq('id', eventId);
 
     if (updateError) {
-      console.error('Failed to update available slots:', updateError.message);
-      return res.status(500).json({ message: 'Failed to update available slots', error: updateError.message });
+      console.error('Failed to update slots_booked:', updateError.message);
+      return res.status(500).json({ message: 'Failed to update slots_booked', error: updateError.message });
     }
 
     res.status(200).json({ success: true, message: 'Enrollment successful', booking: bookingData });
@@ -82,6 +97,7 @@ router.post('/enroll', async (req, res) => {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 });
+
 
 router.get('/my-bookings', authenticateToken, async (req, res) => {
   const userId = req.user.id; // Get the user ID from the token
@@ -111,67 +127,74 @@ router.get('/my-bookings', authenticateToken, async (req, res) => {
 });
 
 router.delete('/cancel-booking/:id', authenticateToken, async (req, res) => { 
+  const bookingId = req.params.id;
+  const userId = req.user.id;
 
-  const bookingId = req.params.id; // Get the booking ID from the URL parameter 
-  console.log('Booking ID:', bookingId); // Log the booking ID
-  const userId = req.user.id; // Get the user ID from the token
-  console.log('User ID:', userId); // Log the user ID
-  try{
+  console.log('Booking ID:', bookingId);
+  console.log('User ID:', userId);
+
+  try {
     // Step 1: Fetch the booking details
     const { data: bookingData, error: bookingError } = await supabase
       .from('bookings')
-      .select('event_id')
+      .select('event_id, booking_status')
       .eq('booking_id', bookingId)
-      .single(); // Get a single booking
+      .eq('user_id', userId)
+      .single();
 
     if (bookingError || !bookingData) {
       console.error('Booking not found:', bookingError ? bookingError.message : 'No booking data');
       return res.status(404).json({ message: 'Booking not found' });
     }
 
-    // Step 2: Delete the booking
-    const { error: deleteError } =  await supabase
-        .from('bookings')
-        .update({ booking_status: 'Cancelled' }) // Update the status to 'canceled'
-        .eq('booking_id', bookingId)
-        .eq('user_id', userId);// Ensure the user ID matches
-
-    if (deleteError) {
-      console.error('Failed to delete booking:', deleteError.message);
-      return res.status(500).json({ message: 'Failed to cancel booking', error: deleteError.message });
+    // Prevent redundant cancel operations
+    if (bookingData.booking_status === 'Cancelled') {
+      return res.status(400).json({ message: 'Booking is already cancelled' });
     }
 
-    // Step 3: Update available slots in the events table
-    const eventId = bookingData.event_id; // Get the event ID from the booking data
+    const eventId = bookingData.event_id;
+
+    // Step 2: Update booking status to 'Cancelled'
+    const { error: cancelError } = await supabase
+      .from('bookings')
+      .update({ booking_status: 'Cancelled' })
+      .eq('booking_id', bookingId)
+      .eq('user_id', userId);
+
+    if (cancelError) {
+      console.error('Failed to cancel booking:', cancelError.message);
+      return res.status(500).json({ message: 'Failed to cancel booking', error: cancelError.message });
+    }
+
+    // Step 3: Decrement slots_booked in the events table
     const { data: eventData, error: eventError } = await supabase
       .from('events')
-      .select('available_slots')
+      .select('slots_booked')
       .eq('id', eventId)
-      .single(); // Get a single event
+      .single();
 
     if (eventError || !eventData) {
       console.error('Event not found:', eventError ? eventError.message : 'No event data');
       return res.status(404).json({ message: 'Event not found' });
     }
 
-    const updatedSlots = eventData.available_slots + 1; // Increment available slots
+    const updatedSlotsBooked = Math.max(0, eventData.slots_booked - 1); // Avoid going below 0
     const { error: updateError } = await supabase
       .from('events')
-      .update({ available_slots: updatedSlots })
+      .update({ slots_booked: updatedSlotsBooked })
       .eq('id', eventId);
 
     if (updateError) {
-      console.error('Failed to update available slots:', updateError.message);
-      return res.status(500).json({ message: 'Failed to update available slots', error: updateError.message });
+      console.error('Failed to update slots_booked:', updateError.message);
+      return res.status(500).json({ message: 'Failed to update slots_booked', error: updateError.message });
     }
 
-    res.status(200).json({ success: true, message: 'Booking canceled successfully' });
-  }
-  catch (err) {
+    res.status(200).json({ success: true, message: 'Booking cancelled successfully' });
+  } catch (err) {
     console.error('Server error:', err.message);
     res.status(500).json({ message: 'Server error', error: err.message });
   }
-}
-);
+});
+
 
 module.exports = router;

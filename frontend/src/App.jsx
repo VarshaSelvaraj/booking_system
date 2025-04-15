@@ -6,19 +6,20 @@ import AllEvents from './pages/AllEvents';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import MyBookings from './pages/MyBookings';
+import Schedule from './pages/Schedule';
 
 function App() {
   return (
     <Router>
       <Routes>
-       <Route path='/' element={<Home/>}/> 
+       <Route path='*' element={<Home/>}/> 
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/allevents" element={<AllEvents/>}/>
         <Route path="/dashboard" element={<Dashboard/>}/>
         <Route path="/profile" element={<Profile/>}/>
         <Route path="/mybookings" element={<MyBookings />} /> {/* Redirect to Home for any other route */}
-
+        <Route path="/schedule" element={<Schedule/>}/>
       </Routes>
     </Router>
   );

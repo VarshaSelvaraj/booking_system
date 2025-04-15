@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import AllEvents from './AllEvents';
-import Profile from './Profile';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import MyBookings from './MyBookings';
-
 const Dashboard = () => {
-  const [activeTab, setActiveTab] = useState('profile');
+  const [activeTab, setActiveTab] = useState('upcoming');
   const [user, setUser] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
@@ -36,18 +34,53 @@ const Dashboard = () => {
     }
   };
 
+  const handleBack = () => {
+    navigate('/login');
+  };
+
   if (!user) {
-    return <p>Loading user information...</p>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-purple-100 to-white">
+        <div className="animate-pulse flex flex-col items-center">
+          <div className="w-16 h-16 bg-purple-200 rounded-full mb-4"></div>
+          <div className="h-4 w-48 bg-purple-200 rounded mb-2"></div>
+          <p className="text-purple-500">Loading user information...</p>
+        </div>
+      </div>
+    );
   }
 
   const capitalizeFirstLetter = (string) =>
     string.charAt(0).toUpperCase() + string.slice(1);
 
   const tabs = [
-    { key: 'profile', label: 'My Profile' },
-    { key: 'upcoming', label: 'Upcoming Events' },
-    { key: 'enrolled', label: 'Enrolled Events' },
-    { key: 'schedule', label: 'Schedule' },
+    { 
+      key: 'upcoming', 
+      label: 'Upcoming Events',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+      )
+    },
+    { 
+      key: 'enrolled', 
+      label: 'My Bookings',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+        </svg>
+      )
+    },
+    { 
+      key: 'schedule', 
+      label: 'Schedule',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      )
+    },
   ];
 
   return (
@@ -74,9 +107,27 @@ const Dashboard = () => {
           </svg>
         </button>
         <h1 className="text-xl font-bold">
-          Hi, {capitalizeFirstLetter(user.username)} 👋🏻
+          {tabs.find(tab => tab.key === activeTab)?.label || 'Dashboard'}
         </h1>
-        <div className="w-6"></div>
+        <button
+          onClick={handleBack}
+          className="text-white focus:outline-none"
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
+          </svg>
+        </button>
       </div>
 
       <div className="flex">
@@ -87,157 +138,234 @@ const Dashboard = () => {
               className="absolute inset-0 bg-black bg-opacity-50"
               onClick={() => setSidebarOpen(false)}
             ></div>
-            <div className="w-64 h-full bg-purple-900 text-white p-6 relative z-50 transform transition-all duration-300">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-bold">
-                  Hi, {capitalizeFirstLetter(user.username)} 👋🏻
-                </h2>
+            <div className="w-64 h-full bg-purple-900 text-white flex flex-col relative z-50 transform transition-all duration-300">
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-xl font-bold flex items-center">
+                    <div className="w-10 h-10 rounded-full bg-white text-purple-900 flex items-center justify-center mr-3 font-bold text-lg">
+                      {user.username.charAt(0).toUpperCase()}
+                    </div>
+                    {capitalizeFirstLetter(user.username)}
+                  </h2>
+                  <button
+                    onClick={() => setSidebarOpen(false)}
+                    className="text-white focus:outline-none"
+                  >
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <div className="border-b border-purple-700 mb-6 pb-6">
+                  <div className="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-purple-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <span className="text-purple-300 text-sm">{user.email}</span>
+                  </div>
+                </div>
+                <ul className="space-y-4">
+                  {tabs.map((tab) => (
+                    <li
+                      key={tab.key}
+                      onClick={() => {
+                        setActiveTab(tab.key);
+                        setSidebarOpen(false);
+                      }}
+                      className={`cursor-pointer px-4 py-3 rounded-lg flex items-center gap-3 transition-all ${
+                        activeTab === tab.key
+                          ? 'bg-white text-purple-900 font-semibold'
+                          : 'hover:bg-purple-700'
+                      }`}
+                    >
+                      <span
+                        className={`${
+                          activeTab === tab.key
+                            ? 'text-purple-800'
+                            : 'text-white'
+                        }`}
+                      >
+                        {tab.icon}
+                      </span>
+                      {tab.label}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Back button */}
+              <div className="mt-auto p-6 border-t border-purple-700">
                 <button
-                  onClick={() => setSidebarOpen(false)}
-                  className="text-white focus:outline-none"
+                  onClick={handleBack}
+                  className="flex items-center space-x-2 w-full px-4 py-2 mb-3 text-white hover:bg-purple-700 rounded-lg transition duration-300"
                 >
                   <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                   >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
+                      d="M11 17l-5-5m0 0l5-5m-5 5h12"
                     />
                   </svg>
+                  <span>Back to Homepage</span>
+                </button>
+
+                {/* Logout button at bottom */}
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center space-x-2 w-full px-4 py-2 text-white bg-red-600 hover:bg-red-700 rounded-lg transition duration-300"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                    />
+                  </svg>
+                  <span>Logout</span>
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Sidebar - Desktop */}
+        <div className="hidden lg:flex lg:flex-col w-72 h-screen sticky top-0 bg-purple-900 text-white shadow-lg">
+          <div className="p-6 flex-1">
+            {/* Back button at top */}
+            <button
+              onClick={handleBack}
+              className="flex items-center space-x-2 mb-7 text-white hover:text-purple-300 transition duration-300"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M11 17l-5-5m0 0l5-5m-5 5h12"
+                />
+              </svg>
+              <span className="text-lg">Back to Homepage</span>
+            </button>
+
+            {/* User info */}
+            <div className="flex items-center mb-4">
+              <div className="w-14 h-14 rounded-full bg-white text-purple-900 flex items-center justify-center mr-4 font-bold text-xl">
+                {user.username.charAt(0).toUpperCase()}
+              </div>
+              <div>
+                <h2 className="text-xl font-bold">
+                  {capitalizeFirstLetter(user.username)}
+                </h2>
+                <p className="text-purple-300 text-sm">{user.email}</p>
+              </div>
+            </div>
+
+            <div className="border-b border-purple-700 my-6"></div>
+
+            {/* Navigation */}
+            <nav className="mt-8">
               <ul className="space-y-4">
-                {tabs.map((tab, index) => (
+                {tabs.map((tab) => (
                   <li
                     key={tab.key}
-                    onClick={() => {
-                      setActiveTab(tab.key);
-                      setSidebarOpen(false);
-                    }}
-                    className={`cursor-pointer px-4 py-2 rounded-lg flex items-center gap-3 transition-all ${
+                    onClick={() => setActiveTab(tab.key)}
+                    className={`cursor-pointer px-4 py-3 rounded-lg flex items-center gap-3 transition-all ${
                       activeTab === tab.key
                         ? 'bg-white text-purple-900 font-semibold'
                         : 'hover:bg-purple-700'
                     }`}
                   >
                     <span
-                      className={`w-6 h-6 text-sm flex items-center justify-center rounded-full ${
+                      className={`${
                         activeTab === tab.key
-                          ? 'bg-purple-200 text-purple-800'
-                          : 'bg-purple-600'
+                          ? 'text-purple-800'
+                          : 'text-white'
                       }`}
                     >
-                      {index + 1}
+                      {tab.icon}
                     </span>
                     {tab.label}
                   </li>
                 ))}
               </ul>
-              <button
-                onClick={handleLogout}
-                className="flex items-center space-x-2 mt-6 text-white hover:text-purple-300 transition duration-300"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                  />
-                </svg>
-                <span className="text-lg font-medium">Logout</span>
-              </button>
-            </div>
+            </nav>
           </div>
-        )}
 
-        {/* Sidebar - Desktop */}
-        <div className="hidden lg:block w-64 h-screen sticky top-0 bg-purple-900 text-white p-6">
-          <button
-            onClick={handleLogout}
-            className="flex items-center space-x-2 mb-7 text-white-500 hover:text-purple-300 transition duration-300"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+          {/* Logout button at bottom */}
+          <div className="p-6 border-t border-purple-700">
+            <button
+              onClick={handleLogout}
+              className="flex items-center justify-center space-x-2 w-full px-4 py-3 text-white bg-red-600 hover:bg-red-700 rounded-lg transition duration-300"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
-            <span className="text-lg font-medium">Logout</span>
-          </button>
-          <div className="flex items-center justify-between mb-10">
-            <h2 className="text-2xl font-bold">
-              Hi, {capitalizeFirstLetter(user.username)} 👋🏻
-            </h2>
-          </div>
-          <ul className="space-y-6">
-            {tabs.map((tab, index) => (
-              <li
-                key={tab.key}
-                onClick={() => setActiveTab(tab.key)}
-                className={`cursor-pointer px-4 py-2 rounded-lg flex items-center gap-3 transition-all ${
-                  activeTab === tab.key
-                    ? 'bg-white text-purple-900 font-semibold'
-                    : 'hover:bg-purple-700'
-                }`}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
-                <span
-                  className={`w-6 h-6 text-sm flex items-center justify-center rounded-full ${
-                    activeTab === tab.key
-                      ? 'bg-purple-200 text-purple-800'
-                      : 'bg-purple-600'
-                  }`}
-                >
-                  {index + 1}
-                </span>
-                {tab.label}
-              </li>
-            ))}
-          </ul>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                />
+              </svg>
+              <span>Logout</span>
+            </button>
+          </div>
         </div>
 
         {/* Content */}
-        <div className="flex-1 min-h-screen p-4 lg:p-10 lg:ml-0 bg-gradient-to-b from-purple-100 to-white">
-          <div className="max-w-8xl mx-auto">
-            {activeTab === 'profile' && (
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <Profile />
-              </div>
-            )}
-            {activeTab === 'upcoming' && (
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <AllEvents />
-              </div>
-            )}
-            {activeTab === 'enrolled' && (
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <MyBookings/>
-              </div>
-            )}
+        <div className="flex-1 min-h-screen">
+          <div className="max-w-8xl mx-auto p-0">
+            {activeTab === 'upcoming' && <AllEvents />}
+            {activeTab === 'enrolled' && <MyBookings />}
             {activeTab === 'schedule' && (
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-2xl font-bold mb-4">Schedule</h2>
-                <p>Scheduling options UI like time slots will go here.</p>
+              <div className="bg-gradient-to-b from-purple-100 to-white min-h-screen p-6">
+                <div className="bg-white rounded-xl shadow-lg p-8">
+                  <h2 className="text-2xl font-bold mb-6 text-purple-900">Your Schedule</h2>
+                  <div className="flex justify-center items-center h-64 bg-purple-50 rounded-lg border-2 border-dashed border-purple-200">
+                    <div className="text-center p-6">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-purple-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <h3 className="text-xl font-medium text-gray-800 mb-2">Schedule Coming Soon</h3>
+                      <p className="text-gray-600">Your personalized schedule will be available here.</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
           </div>
