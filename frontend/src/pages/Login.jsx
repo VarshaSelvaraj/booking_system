@@ -117,12 +117,10 @@ const Login = () => {
 
           {/* Form on the Right */}
           <div className="w-full md:w-3/4 text-left">
-            <h2 className="text-xl md:text-2xl lg:text-4xl font-extrabold text-gray-600 mb-6">
+            <h2 className="text-xl md:text-2xl lg:text-3xl font-extrabold text-gray-600 mb-6">
               Hi, Welcome back!
             </h2>
-            <p className="text-md md:text-lg lg:text-xl text-gray-600 mb-8">
-              Please log in to your account.
-            </p>
+            
 
             <form onSubmit={handleSubmit} className="space-y-4">
               {[
