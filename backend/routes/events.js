@@ -34,7 +34,7 @@ router.post('/enroll', async (req, res) => {
   console.log('User ID:', userId);
 
   try {
-    // ✅ Step 1: Check if user already enrolled in this event
+    // Step 1: Check if user already enrolled in this event
     const { data: existingBooking, error: existingBookingError } = await supabase
       .from('bookings')
       .select('booking_id')
@@ -47,7 +47,7 @@ router.post('/enroll', async (req, res) => {
       return res.status(400).json({ message: 'You are already enrolled in this event' });
     }
 
-    // ✅ Step 2: Fetch available slots and slots_booked
+    // Step 2: Fetch available slots and slots_booked
     const { data: eventData, error: eventError } = await supabase
       .from('events')
       .select('available_slots, slots_booked')
@@ -59,12 +59,12 @@ router.post('/enroll', async (req, res) => {
       return res.status(404).json({ message: 'Event not found' });
     }
 
-    // ✅ Step 3: Check if event is fully booked
+    // Step 3: Check if event is fully booked
     if (eventData.slots_booked >= eventData.available_slots) {
       return res.status(400).json({ message: 'No available slots for this event' });
     }
 
-    // ✅ Step 4: Insert booking
+    // Step 4: Insert booking
     const { data: bookingData, error: bookingError } = await supabase
       .from('bookings')
       .insert([{
@@ -79,7 +79,7 @@ router.post('/enroll', async (req, res) => {
       return res.status(500).json({ message: 'Failed to enroll in event', error: bookingError.message });
     }
 
-    // ✅ Step 5: Increment slots_booked
+    // Step 5: Increment slots_booked
     const updatedSlotsBooked = eventData.slots_booked + 1;
     const { error: updateError } = await supabase
       .from('events')
@@ -178,7 +178,7 @@ router.delete('/cancel-booking/:id', authenticateToken, async (req, res) => {
       return res.status(404).json({ message: 'Event not found' });
     }
 
-    const updatedSlotsBooked = Math.max(0, eventData.slots_booked - 1); // Avoid going below 0
+    const updatedSlotsBooked = Math.max(0, eventData.slots_booked - 1); 
     const { error: updateError } = await supabase
       .from('events')
       .update({ slots_booked: updatedSlotsBooked })
