@@ -19,7 +19,7 @@ const Dashboard = () => {
       })
       .catch((error) => {
         console.error('Error fetching user data:', error);
-        navigate('/login');
+        navigate('/main');
       });
   }, [navigate]);
 
@@ -30,19 +30,20 @@ const Dashboard = () => {
         {},
         { withCredentials: true }
       );
-      navigate('/login');
+      navigate('/main');
     } catch (error) {
       console.error('Error during logout:', error);
     }
   };
 
   const handleBack = () => {
-    navigate('/login');
+    handleLogout();
+    navigate('/main');
   };
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-purple-400 to-purple-100">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-violet-400 to-violet-100">
         <div className="animate-pulse flex flex-col items-center">
           <div className="w-16 h-16 bg-white rounded-full mb-4"></div>
           <div className="h-4 w-48 bg-white rounded mb-2"></div>
@@ -86,7 +87,7 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-100 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-violet-100 to-white">
       {/* Wave pattern at top */}
       <div className="absolute top-0 left-0 right-0 z-0 h-32 overflow-hidden">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="w-full">
@@ -95,7 +96,7 @@ const Dashboard = () => {
       </div>
 
       {/* Mobile Header */}
-      <div className="lg:hidden bg-gradient-to-r from-purple-500 to-purple-400 text-white p-4 flex justify-between items-center sticky top-0 z-30 shadow-md">
+      <div className="lg:hidden bg-gradient-to-b from-violet-400 via-violet-300 to-violet-200 text-white p-4 flex justify-between items-center sticky top-0 z-30 shadow-md">
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="text-white focus:outline-none"
@@ -147,11 +148,11 @@ const Dashboard = () => {
               className="absolute inset-0 bg-black bg-opacity-50"
               onClick={() => setSidebarOpen(false)}
             ></div>
-            <div className="w-64 h-full bg-gradient-to-b from-purple-500 to-purple-600 text-white flex flex-col relative z-50 transform transition-all duration-300 shadow-xl">
+            <div className="w-64 h-full bg-gradient-to-b from-violet-400 via-violet-300 to-violet-200 text-white flex flex-col relative z-50 transform transition-all duration-300 shadow-xl">
               <div className="p-6">
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-xl font-bold flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-white text-purple-600 flex items-center justify-center mr-3 font-bold text-lg shadow-md">
+                    <div className="w-10 h-10 rounded-full bg-white text-violet-600 flex items-center justify-center mr-3 font-bold text-lg shadow-md">
                       {user.username.charAt(0).toUpperCase()}
                     </div>
                     {capitalizeFirstLetter(user.username)}
@@ -176,12 +177,12 @@ const Dashboard = () => {
                     </svg>
                   </button>
                 </div>
-                <div className="border-b border-purple-400 mb-6 pb-6">
+                <div className="border-b border-violet-400 mb-6 pb-6">
                   <div className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-purple-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-violet-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
-                    <span className="text-purple-100 text-sm">{user.email}</span>
+                    <span className="text-violet-100 text-sm">{user.email}</span>
                   </div>
                 </div>
                 <ul className="space-y-4">
@@ -194,14 +195,14 @@ const Dashboard = () => {
                       }}
                       className={`cursor-pointer px-4 py-3 rounded-lg flex items-center gap-3 transition-all ${
                         activeTab === tab.key
-                          ? 'bg-white text-purple-600 font-semibold shadow-md'
-                          : 'hover:bg-purple-400'
+                          ? 'bg-white text-violet-600 font-semibold shadow-md'
+                          : 'hover:bg-violet-400'
                       }`}
                     >
                       <span
                         className={`${
                           activeTab === tab.key
-                            ? 'text-purple-600'
+                            ? 'text-violet-600'
                             : 'text-white'
                         }`}
                       >
@@ -214,10 +215,10 @@ const Dashboard = () => {
               </div>
 
               {/* Back button */}
-              <div className="mt-auto p-6 border-t border-purple-400">
+              <div className="mt-auto p-6 border-t border-violet-400">
                 <button
                   onClick={handleBack}
-                  className="flex items-center space-x-2 w-full px-4 py-2 mb-3 text-white hover:bg-purple-400 rounded-lg transition duration-300"
+                  className="flex items-center space-x-2 w-full px-4 py-2 mb-3 text-white hover:bg-violet-400 rounded-lg transition duration-300"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -236,39 +237,44 @@ const Dashboard = () => {
                   <span>Back to Homepage</span>
                 </button>
 
-                {/* Logout button at bottom */}
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center justify-center space-x-2 w-full px-4 py-3 text-white bg-purple-700 hover:bg-purple-800 rounded-lg transition duration-300 shadow-md"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                    />
-                  </svg>
-                  <span>Log Out</span>
-                </button>
+                
+                  {/* Logout button at bottom */}
+          <div className="p-6 border-t border-violet-400">
+          <button
+            onClick={handleLogout}
+            style={{ backgroundImage: 'linear-gradient(135deg, #9f7aea, #805ad5)' }}
+            className="flex items-center justify-center space-x-2 w-full px-4 py-3 text-white font-bold rounded-lg transition duration-300 shadow-md transform hover:scale-105"
+          >
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                />
+              </svg>
+              <span>Log Out</span>
+            </button>
+          </div>
               </div>
             </div>
           </div>
         )}
 
         {/* Sidebar - Desktop */}
-        <div className="hidden lg:flex lg:flex-col w-72 h-screen sticky top-0 bg-gradient-to-b from-purple-500 to-purple-600 text-white shadow-lg">
+        <div className="hidden lg:flex lg:flex-col w-72 h-screen sticky top-0 bg-gradient-to-b from-violet-400 via-violet-300 to-violet-200 text-white shadow-lg">
           <div className="p-6 flex-1">
             {/* Back button at top */}
             <button
               onClick={handleBack}
-              className="flex items-center space-x-2 mb-7 text-white hover:text-purple-200 transition duration-300"
+              className="flex items-center space-x-2 mb-7 text-white hover:text-violet-200 transition duration-300"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -289,18 +295,18 @@ const Dashboard = () => {
 
             {/* User info */}
             <div className="flex items-center mb-4">
-              <div className="w-14 h-14 rounded-full bg-white text-purple-600 flex items-center justify-center mr-4 font-bold text-xl shadow-md">
+              <div className="w-14 h-14 rounded-full bg-white text-violet-600 flex items-center justify-center mr-4 font-bold text-xl shadow-md">
                 {user.username.charAt(0).toUpperCase()}
               </div>
               <div>
                 <h2 className="text-xl font-bold">
                   {capitalizeFirstLetter(user.username)}
                 </h2>
-                <p className="text-purple-200 text-sm">{user.email}</p>
+                <p className="text-violet-200 text-sm">{user.email}</p>
               </div>
             </div>
 
-            <div className="border-b border-purple-400 my-6"></div>
+            <div className="border-b border-violet-400 my-6"></div>
 
             {/* Navigation */}
             <nav className="mt-8">
@@ -311,14 +317,14 @@ const Dashboard = () => {
                     onClick={() => setActiveTab(tab.key)}
                     className={`cursor-pointer px-4 py-3 rounded-lg flex items-center gap-3 transition-all ${
                       activeTab === tab.key
-                        ? 'bg-white text-purple-600 font-semibold shadow-md'
-                        : 'hover:bg-purple-400'
+                        ? 'bg-white text-violet-600 font-semibold shadow-md'
+                        : 'hover:bg-violet-400'
                     }`}
                   >
                     <span
                       className={`${
                         activeTab === tab.key
-                          ? 'text-purple-600'
+                          ? 'text-violet-600'
                           : 'text-white'
                       }`}
                     >
@@ -332,11 +338,13 @@ const Dashboard = () => {
           </div>
 
           {/* Logout button at bottom */}
-          <div className="p-6 border-t border-purple-400">
-            <button
-              onClick={handleLogout}
-              className="flex items-center justify-center space-x-2 w-full px-4 py-3 text-white bg-purple-700 hover:bg-purple-800 rounded-lg transition duration-300 shadow-md"
-            >
+          <div className="p-6 border-t border-violet-400">
+          <button
+            onClick={handleLogout}
+            style={{ backgroundImage: 'linear-gradient(135deg, #9f7aea, #805ad5)' }}
+            className="flex items-center justify-center space-x-2 w-full px-4 py-3 text-white font-bold rounded-lg transition duration-300 shadow-md transform hover:scale-105"
+          >
+
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"

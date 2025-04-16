@@ -37,9 +37,9 @@ const Profile = () => {
 
   if (!user) {
     return (
-      <div className="flex justify-center items-center h-screen bg-gradient-to-b from-purple-100 to-white">
+      <div className="flex justify-center items-center h-screen bg-gradient-to-b from-violet-100 to-white">
         <motion.div variants={containerVariants} initial="hidden" animate="visible">
-          <NotebookIcon className="w-10 h-10 text-purple-500 mb-4" />
+          <NotebookIcon className="w-10 h-10 text-violet-500 mb-4" />
           <h1 className="text-2xl font-bold text-gray-600">Loading user information...</h1>
         </motion.div>
       </div>

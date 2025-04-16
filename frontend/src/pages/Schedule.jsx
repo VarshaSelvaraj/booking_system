@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Calendar, dateFnsLocalizer, Views } from 'react-big-calendar';
-import format from 'date-fns/format';
-import parse from 'date-fns/parse';
-import startOfWeek from 'date-fns/startOfWeek';
-import getDay from 'date-fns/getDay';
-import addMonths from 'date-fns/addMonths';
-import subMonths from 'date-fns/subMonths';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import axios from 'axios';
-import enUS from 'date-fns/locale/en-US';
+import React, { useEffect, useState } from "react";
+import { Calendar, dateFnsLocalizer, Views } from "react-big-calendar";
+import format from "date-fns/format";
+import parse from "date-fns/parse";
+import startOfWeek from "date-fns/startOfWeek";
+import getDay from "date-fns/getDay";
+import addMonths from "date-fns/addMonths";
+import subMonths from "date-fns/subMonths";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import axios from "axios";
+import enUS from "date-fns/locale/en-US";
 
 const locales = {
-  'en-US': enUS,
+  "en-US": enUS,
 };
 
 const localizer = dateFnsLocalizer({
@@ -136,11 +136,11 @@ const Schedule = () => {
 
   useEffect(() => {
     // Add custom styles to head
-    const styleElement = document.createElement('style');
-    styleElement.type = 'text/css';
+    const styleElement = document.createElement("style");
+    styleElement.type = "text/css";
     styleElement.appendChild(document.createTextNode(customStyles));
     document.head.appendChild(styleElement);
-    
+
     return () => {
       document.head.removeChild(styleElement);
     };
@@ -150,47 +150,64 @@ const Schedule = () => {
     const fetchEvents = async () => {
       setIsLoading(true);
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/events/my-bookings`, {
-          withCredentials: true,
-        });
-        
-        const calendarEvents = res.data.map((booking) => {
-          // Handle potential formatting issues
-          try {
-            const startTime = booking.events.time_slot.split(' - ')[0]; // e.g., '10:00 AM'
-            const endTime = booking.events.time_slot.split(' - ')[1] || 
-                            format(new Date(new Date(`${booking.events.date} ${startTime}`).getTime() + 60 * 60 * 1000), 'h:mm a');
-            
-            const eventStart = new Date(`${booking.events.date} ${startTime}`);
-            const eventEnd = endTime ? new Date(`${booking.events.date} ${endTime}`) : 
-                             new Date(eventStart.getTime() + 60 * 60 * 1000);
-            
-            return {
-              id: booking.id || booking._id,
-              title: booking.events.event_title,
-              start: eventStart,
-              end: eventEnd,
-              resource: booking.events.description || '',
-              location: booking.events.location || '',
-              // Add custom styling based on event type if needed
-              className: booking.events.event_type ? `event-${booking.events.event_type.toLowerCase()}` : 'event-default'
-            };
-          } catch (err) {
-            console.error('Error parsing event data:', err, booking);
-            return null;
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/events/my-bookings`,
+          {
+            withCredentials: true,
           }
-        }).filter(event => event !== null);
-        
+        );
+
+        const calendarEvents = res.data
+          .map((booking) => {
+            // Handle potential formatting issues
+            try {
+              const startTime = booking.events.time_slot.split(" - ")[0]; // e.g., '10:00 AM'
+              const endTime =
+                booking.events.time_slot.split(" - ")[1] ||
+                format(
+                  new Date(
+                    new Date(`${booking.events.date} ${startTime}`).getTime() +
+                      60 * 60 * 1000
+                  ),
+                  "h:mm a"
+                );
+
+              const eventStart = new Date(
+                `${booking.events.date} ${startTime}`
+              );
+              const eventEnd = endTime
+                ? new Date(`${booking.events.date} ${endTime}`)
+                : new Date(eventStart.getTime() + 60 * 60 * 1000);
+
+              return {
+                id: booking.id || booking._id,
+                title: booking.events.event_title,
+                start: eventStart,
+                end: eventEnd,
+                resource: booking.events.description || "",
+                location: booking.events.location || "",
+                // Add custom styling based on event type if needed
+                className: booking.events.event_type
+                  ? `event-${booking.events.event_type.toLowerCase()}`
+                  : "event-default",
+              };
+            } catch (err) {
+              console.error("Error parsing event data:", err, booking);
+              return null;
+            }
+          })
+          .filter((event) => event !== null);
+
         setEvents(calendarEvents);
         setError(null);
       } catch (error) {
-        console.error('Error fetching calendar data:', error);
-        setError('Failed to load your bookings. Please try again later.');
+        console.error("Error fetching calendar data:", error);
+        setError("Failed to load your bookings. Please try again later.");
       } finally {
         setIsLoading(false);
       }
     };
-    
+
     fetchEvents();
   }, []);
 
@@ -198,7 +215,7 @@ const Schedule = () => {
   const eventStyleGetter = (event) => {
     // Basic styles applied through CSS classes
     return {
-      className: event.className || 'event-default'
+      className: event.className || "event-default",
     };
   };
 
@@ -208,7 +225,7 @@ const Schedule = () => {
     setHoveredEvent(event);
     setTooltipPosition({
       top: rect.bottom + window.scrollY + 10,
-      left: rect.left + window.scrollX
+      left: rect.left + window.scrollX,
     });
   };
 
@@ -219,13 +236,23 @@ const Schedule = () => {
   // Month selection dropdown
   const MonthSelector = ({ currentDate, onSelectMonth }) => {
     const months = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
-    
+
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth();
-    
+
     // Generate array of months for current year and 1 year before/after
     const options = [];
     for (let year = currentYear - 1; year <= currentYear + 1; year++) {
@@ -233,18 +260,20 @@ const Schedule = () => {
         options.push({ month, year });
       }
     }
-    
+
     return (
       <div className="relative">
-        <div 
+        <div
           className="bg-white border border-gray-300 shadow-lg rounded-md p-2 absolute z-10 mt-1 w-64 max-h-64 overflow-y-auto month-dropdown"
-          style={{ top: '100%', left: '50%', transform: 'translateX(-50%)' }}
+          style={{ top: "100%", left: "50%", transform: "translateX(-50%)" }}
         >
           {options.map((option, index) => (
-            <div 
+            <div
               key={index}
               className={`p-2 cursor-pointer hover:bg-purple-100 rounded ${
-                option.month === currentMonth && option.year === currentYear ? 'bg-purple-200' : ''
+                option.month === currentMonth && option.year === currentYear
+                  ? "bg-purple-200"
+                  : ""
               }`}
               onClick={() => {
                 onSelectMonth(new Date(option.year, option.month, 1));
@@ -263,19 +292,19 @@ const Schedule = () => {
   const CustomToolbar = (toolbar) => {
     const goToBack = () => {
       const newDate = subMonths(toolbar.date, 1);
-      toolbar.onNavigate('DATE', newDate);
+      toolbar.onNavigate("DATE", newDate);
       setCurrentDate(newDate);
     };
-    
+
     const goToNext = () => {
       const newDate = addMonths(toolbar.date, 1);
-      toolbar.onNavigate('DATE', newDate);
+      toolbar.onNavigate("DATE", newDate);
       setCurrentDate(newDate);
     };
-    
+
     const goToCurrent = () => {
       const today = new Date();
-      toolbar.onNavigate('TODAY');
+      toolbar.onNavigate("TODAY");
       setCurrentDate(today);
     };
 
@@ -284,27 +313,27 @@ const Schedule = () => {
     };
 
     const onSelectMonth = (date) => {
-      toolbar.onNavigate('DATE', date);
+      toolbar.onNavigate("DATE", date);
       setCurrentDate(date);
     };
 
     return (
       <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-2">
         <div className="flex">
-          <button 
+          <button
             className="custom-toolbar-btn py-2 px-4 rounded-l mr-1 font-semibold"
             onClick={goToCurrent}
           >
             Today
           </button>
-          <button 
+          <button
             className="custom-toolbar-btn py-2 px-4 mr-1 font-semibold"
             onClick={goToBack}
             aria-label="Previous Month"
           >
             <span aria-hidden="true">«</span> Prev
           </button>
-          <button 
+          <button
             className="custom-toolbar-btn py-2 px-4 rounded-r font-semibold"
             onClick={goToNext}
             aria-label="Next Month"
@@ -312,20 +341,31 @@ const Schedule = () => {
             Next <span aria-hidden="true">»</span>
           </button>
         </div>
-        
+
         <div className="relative">
-          <button 
+          <button
             className="text-xl font-bold hover:bg-purple-100 py-1 px-3 rounded flex items-center text-purple-800"
             onClick={toggleMonthDropdown}
           >
-            {format(toolbar.date, 'MMMM yyyy')}
-            <svg className="w-4 h-4 ml-1 text-purple-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+            {format(toolbar.date, "MMMM yyyy")}
+            <svg
+              className="w-4 h-4 ml-1 text-purple-800"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M19 9l-7 7-7-7"
+              ></path>
             </svg>
           </button>
-          
+
           {showMonthDropdown && (
-            <MonthSelector 
+            <MonthSelector
               currentDate={currentDate}
               onSelectMonth={onSelectMonth}
             />
@@ -337,14 +377,16 @@ const Schedule = () => {
 
   // Custom event component for more details
   const EventComponent = ({ event }) => (
-    <div 
+    <div
       className="text-xs overflow-hidden"
       onMouseEnter={(e) => handleEventMouseEnter(event, e)}
       onMouseLeave={handleEventMouseLeave}
     >
       <strong className="block truncate">{event.title}</strong>
       {view !== Views.MONTH && event.location && (
-        <span className="block truncate text-gray-100">📍 {event.location}</span>
+        <span className="block truncate text-gray-100">
+          📍 {event.location}
+        </span>
       )}
     </div>
   );
@@ -352,34 +394,29 @@ const Schedule = () => {
   // Custom tooltip for events
   const CustomTooltip = () => {
     if (!hoveredEvent) return null;
-    
+
     return (
-      <div 
+      <div
         className="event-tooltip"
-        style={{ 
-          position: 'absolute',
-          top: tooltipPosition.top + 'px',
-          left: tooltipPosition.left + 'px'
+        style={{
+          position: "absolute",
+          top: tooltipPosition.top + "px",
+          left: tooltipPosition.left + "px",
         }}
       >
-        <h3 className="font-bold text-lg mb-1 text-purple-800">{hoveredEvent.title}</h3>
-        <p className="mb-1 text-gray-700">
-          <strong className="text-purple-700">When:</strong> {format(hoveredEvent.start, 'MMMM d, yyyy h:mm a')} - {format(hoveredEvent.end, 'h:mm a')}
+        <h3 className="font-bold text-md mb-1 text-violet-400">
+          {hoveredEvent.title}
+        </h3>
+        <p className="mb-1 text-gray-400 font-bold text-sm">
+          {format(hoveredEvent.start, "MMMM d, yyyy h:mm a")} -{" "}
+          {format(hoveredEvent.end, "h:mm a")}
         </p>
-        {hoveredEvent.location && (
-          <p className="mb-1 text-gray-700"><strong className="text-purple-700">Location:</strong> {hoveredEvent.location}</p>
-        )}
-        {hoveredEvent.resource && (
-          <p className="text-gray-700"><strong className="text-purple-700">Details:</strong> {hoveredEvent.resource}</p>
-        )}
       </div>
     );
   };
 
   return (
-    <div className="p-4 min-h-screen" style={{ background: 'linear-gradient(180deg, #f8f6ff 0%, #e9d8fd 100%)' }}>
-    
-      
+    <div className="p-10 min-h-screen">
       {isLoading ? (
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 loading-spinner"></div>
@@ -387,7 +424,7 @@ const Schedule = () => {
       ) : error ? (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
           <p>{error}</p>
-          <button 
+          <button
             className="mt-2 bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded"
             onClick={() => window.location.reload()}
           >
@@ -395,9 +432,10 @@ const Schedule = () => {
           </button>
         </div>
       ) : (
-        <div className="bg-white shadow-lg rounded-lg p-4">
+        <div className=" p-4">
           <Calendar
             localizer={localizer}
+            className="p-10"
             events={events}
             startAccessor="start"
             endAccessor="end"
@@ -408,7 +446,7 @@ const Schedule = () => {
             onNavigate={(date) => setCurrentDate(date)}
             components={{
               toolbar: CustomToolbar,
-              event: EventComponent
+              event: EventComponent,
             }}
             eventPropGetter={eventStyleGetter}
             popup
@@ -416,30 +454,17 @@ const Schedule = () => {
             onView={(newView) => setView(newView)}
             onSelectEvent={(event) => {
               // You can add an event click handler here
-              console.log('Event clicked:', event);
+              console.log("Event clicked:", event);
               // Option to navigate to event details page or show a modal with full details
             }}
           />
-          
+
           {/* Custom tooltip that appears on hover */}
           {hoveredEvent && <CustomTooltip />}
         </div>
       )}
-      
+
       {/* Wave decoration at bottom, similar to login page */}
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden" style={{ zIndex: -1 }}>
-        <svg 
-          xmlns="http://www.w3.org/2000/svg" 
-          viewBox="0 0 1440 320"
-          className="w-full"
-        >
-          <path 
-            fill="#9f7aea" 
-            fillOpacity="0.8" 
-            d="M0,64L48,80C96,96,192,128,288,128C384,128,480,96,576,90.7C672,85,768,107,864,122.7C960,139,1056,149,1152,138.7C1248,128,1344,96,1392,80L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-          />
-        </svg>
-      </div>
     </div>
   );
 };

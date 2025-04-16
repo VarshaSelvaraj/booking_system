@@ -24,12 +24,12 @@ const HomePage = () => {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col justify-center items-center bg-gradient-to-b from-purple-100 to-white text-center overflow-hidden">
+    <div className="relative min-h-screen flex flex-col justify-center items-center bg-gradient-to-b from-violet-100 to-white text-center overflow-hidden">
       {/* Transparent Navigation Bar */}
       <nav className="absolute top-0 left-0 right-0 py-4 px-6 flex items-center justify-between bg-transparent shadow-md z-20">
         <div className="flex items-center space-x-2">
           <NotebookIcon
-            className="w-10 h-5 text-purple-500"
+            className="w-10 h-5 text-violet-500"
           />
           <h1 className="text-xl font-bold text-gray-500">BookSmart</h1>
         </div>
