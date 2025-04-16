@@ -176,10 +176,7 @@ const Login = () => {
                 onClick={togglePasswordVisibility}
                 className="focus:outline-none"
               >
-                {showPassword ? 
-                  <EyeOff className="h-5 w-5 text-gray-400 hover:text-violet-500" /> : 
-                  <Eye className="h-5 w-5 text-gray-400 hover:text-violet-500" />
-                }
+                
               </button>
             </div>
             {errors.password && (

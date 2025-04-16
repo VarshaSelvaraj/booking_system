@@ -285,9 +285,7 @@ const AllEvents = () => {
       {/* Modal */}
       {enrollmentModalOpen && selectedEvent && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50">
-          {/* Modal Container */}
           <div className="bg-white rounded-2xl shadow-lg w-full max-w-2xl p-6 relative animate-fadeIn overflow-hidden mx-4">
-            {/* Close Button */}
             <button
               className="absolute top-4 right-4 text-gray-400 hover:text-violet-400 transition-colors duration-300 p-1 rounded-full hover:bg-gray-100"
               onClick={closeModal}
@@ -299,10 +297,9 @@ const AllEvents = () => {
 
             {/* Modal Content */}
             <div className="space-y-5">
-              {/* Event Title */}
+          
               <h2 className="text-2xl font-bold text-violet-900">{selectedEvent.event_title}</h2>
 
-              {/* Progress Bar in Modal */}
               <div className="mt-2 mb-4">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm font-medium text-gray-700">Enrollment Status</span>

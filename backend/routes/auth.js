@@ -6,55 +6,77 @@ const jwt = require('jsonwebtoken');
 
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
-    const { username, email, empId, designation, password } = req.body;
-  
-    console.log('Received register data:', req.body);
-  
-    if (!username || !email || !empId || !designation || !password) {
-      return res.status(400).json({ message: 'All fields are required' });
+  let { username, email, empId, designation, password } = req.body;
+
+  console.log('Received register data:', req.body);
+
+  if (!username || !email || !empId || !designation || !password) {
+    return res.status(400).json({ message: 'All fields are required' });
+  }
+
+  // 🔽 Normalize username to lowercase
+  username = username.toLowerCase();
+
+  try {
+    // Check if email already exists
+    const { data: existingEmail } = await supabase
+      .from('users')
+      .select('id')
+      .eq('email', email)
+      .single();
+
+    if (existingEmail) {
+      return res.status(400).json({ message: 'Email already exists' });
     }
-  
-    try {
-      // Check if email already exists
-      const { data: existingUser, error: fetchError } = await supabase
-        .from('users')
-        .select('id')
-        .eq('email', email)
-        .single();
-  
-      if (existingUser) {
-        return res.status(400).json({ message: 'Email already exists' });
-      }
-  
-      // Hash the password
-      const hashedPassword = await bcrypt.hash(password, 10);
-  
-      // Insert user into Supabase
-      const { data, error: insertError } = await supabase
-        .from('users')
-        .insert([
-          {
-            username,
-            email,
-            empid: empId,
-            designation,
-            password: hashedPassword
-          }
-        ]);
-  
+
+    // Check if lowercase username already exists
+    const { data: existingUsername } = await supabase
+      .from('users')
+      .select('id')
+      .eq('username', username)
+      .single();
+
+    if (existingUsername) {
+      return res.status(400).json({ message: 'Username already taken' });
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Insert user
+    const { error: insertError } = await supabase
+      .from('users')
+      .insert([
+        {
+          username, // already lowercase
+          email,
+          empid: empId,
+          designation,
+          password: hashedPassword
+        }
+      ]);
+
       if (insertError) {
         console.error('Supabase insert error:', insertError.message);
+      
+        if (insertError.message.includes('users_username_key')) {
+          return res.status(400).json({ message: 'Username already taken' });
+        }
+      
+        if (insertError.message.includes('users_email_key')) {
+          return res.status(400).json({ message: 'Email already exists' });
+        }
+      
         return res.status(500).json({ message: 'Insert failed', error: insertError.message });
       }
-  
-      res.status(201).json({ message: 'User registered successfully' });
-    } catch (err) {
-      console.error('Server error:', err.message);
-      res.status(500).json({ message: 'Server error', error: err.message });
-    }
-  });
-  
-  
+
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (err) {
+    console.error('Server error:', err.message);
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+});
+
 
 // POST /api/auth/login
 router.post('/login', async (req, res) => {

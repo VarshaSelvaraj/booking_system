@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
 import axios from "axios";
-import { motion } from "framer-motion"; // Add this import for animations
+import { motion } from "framer-motion";
 
 const Main = () => {
   const [activeTab, setActiveTab] = useState("login");
@@ -67,117 +67,136 @@ const Main = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-violet-600 to-violet-900 relative overflow-hidden">
-      {/* Wave Design */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        <svg className="absolute bottom-0 left-0 w-full" 
-             viewBox="0 0 1440 320" 
-             preserveAspectRatio="none">
-          <path 
-            fill="rgba(255, 255, 255, 0.1)" 
-            d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,117.3C672,107,768,117,864,138.7C960,160,1056,192,1152,197.3C1248,203,1344,181,1392,170.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
-          </path>
-        </svg>
-        <svg className="absolute bottom-0 left-0 w-full" 
-             viewBox="0 0 1440 320" 
-             preserveAspectRatio="none">
-          <path 
-            fill="rgba(255, 255, 255, 0.05)" 
-            d="M0,160L48,144C96,128,192,96,288,101.3C384,107,480,149,576,165.3C672,181,768,171,864,154.7C960,139,1056,117,1152,117.3C1248,117,1344,139,1392,149.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
-          </path>
-        </svg>
+    <div className="min-h-screen bg-gradient-to-b from-purple-100 to-white overflow-hidden">
+      {/* Mobile Header */}
+      <div className="lg:hidden bg-gradient-to-b from-purple-400 via-purple-300 to-purple-200 text-white p-4 flex justify-between items-center sticky top-0 z-30 shadow-md">
+        <h1 className="text-xl font-bold">JEvents</h1>
+        <div className="flex space-x-2">
+          <button
+            onClick={handleLoginClick}
+            className={`px-3 py-1 rounded-lg text-sm ${activeTab === "login" ? "bg-white text-purple-600" : "bg-transparent border border-white"}`}
+          >
+            Login
+          </button>
+          <button
+            onClick={handleRegisterClick}
+            className={`px-3 py-1 rounded-lg text-sm ${activeTab === "register" ? "bg-white text-purple-600" : "bg-transparent border border-white"}`}
+          >
+            Register
+          </button>
+        </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex flex-col md:flex-row h-screen relative z-10">
-        {/* Left Side - Background with text */}
-        <div className="w-4xl md:w-3/4 bg-gradient-to-b from-violet-400 via-violet-300 to-violet-200 flex flex-col justify-center  md:p-16 text-white">
-          <motion.div 
+      <div className="flex flex-col lg:flex-row min-h-screen">
+        {/* Left Side - Info Section */}
+        <div className="w-full lg:w-3/4 p-6 lg:p-12 flex flex-col justify-center">
+          <motion.div
             className="max-w-lg mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <motion.h1 
-              className="text-4xl md:text-5xl text-violet-900 font-extrabold mb-6"
+            {/* Brand & Title - Hidden on mobile if header is shown */}
+            <motion.div 
+              className="hidden lg:block mb-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.8 }}
             >
-              JEvents
-            </motion.h1>
-            <motion.p 
-              className="text-xl mb-8 opacity-90 text-violet-900 "
+              <h1 className="text-4xl md:text-5xl text-purple-900 font-extrabold">
+                JEvents
+              </h1>
+              <div className="h-1 w-20 bg-gradient-to-r from-purple-400 to-purple-600 mt-3 mb-6"></div>
+            </motion.div>
+
+            <motion.p
+              className="text-xl mb-8 text-purple-900"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4, duration: 0.8 }}
             >
-              Your one-stop platform for discovering and joining amazing events. 
+              Your one-stop platform for discovering and joining amazing events.
               Connect with communities and expand your horizons.
             </motion.p>
 
             {/* Upcoming Events Section */}
-            <motion.div 
+            <motion.div
               className="mb-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.8 }}
             >
-              <h2 className="text-2xl font-semibold mb-4 text-violet-900 ">Upcoming Events</h2>
+              <div className="flex items-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-violet-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <h2 className="text-2xl font-semibold text-violet-900">Upcoming Events</h2>
+              </div>
+
               {loading ? (
                 <div className="flex justify-center p-6">
-                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-violet-900"></div>
+                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-600"></div>
                 </div>
               ) : error ? (
                 <p className="text-red-600">{error}</p>
               ) : upcomingEvents.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {upcomingEvents.map((event, index) => (
-                    <motion.div 
-                      key={event.id} 
-                      className="bg-white/20 backdrop-blur-sm rounded-lg p-4 hover:bg-white/30 transition-all cursor-pointer h-full"
+                    <motion.div
+                      key={event.id}
+                      className="bg-white rounded-lg p-4 shadow-lg hover:shadow-xl transition-all cursor-pointer border-l-4 border-violet-900"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 * (index + 1), duration: 0.5 }}
-                      whileHover={{ scale: 1.05, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)" }}
+                      whileHover={{ scale: 1.03 }}
                     >
-                      <h3 className="font-bold text-lg text-violet-900 opacity-90 ">{event.event_title}</h3>
-                      <div className="mt-2 text-xs inline-block bg-violet-900/20 px-3 py-1 rounded-full text-violet-900">
-                      {formatDate(event.date)}
+                      <h3 className="font-bold text-lg text-purple-900">{event.event_title}</h3>
+                      <div className="mt-2 text-xs inline-block bg-purple-100 px-3 py-1 rounded-full text-purple-800">
+                        {formatDate(event.date)}
                       </div>
-                      
-                      <p className="text-sm font-bold text-violet-800 opacity-50  mt-1">{event.time_slot}</p>
-                    
-                     
+                      <p className="text-sm font-medium text-violet-600 mt-1">{event.time_slot}</p>
                     </motion.div>
                   ))}
                 </div>
               ) : (
-                <motion.p 
+                <motion.div
+                  className="bg-white rounded-lg p-6 shadow-lg border border-purple-100 text-center"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                 >
-                  No upcoming events to display.
-                </motion.p>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-purple-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  <p className="text-purple-900">No upcoming events to display.</p>
+                </motion.div>
               )}
             </motion.div>
 
-            <motion.div 
-              className="space-y-4 md:space-y-0 md:space-x-4 md:flex"
+            {/* Desktop Action Buttons - Hidden on mobile */}
+            <motion.div
+              className="hidden lg:flex space-x-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8, duration: 0.8 }}
             >
               <motion.button
                 onClick={handleLoginClick}
-                className={`${activeTab === "login" ? "bg-white text-purple-700" : "bg-transparent border-2 border-white text-white hover:bg-white/10"} px-8 py-3 rounded-lg font-semibold shadow-lg w-full md:w-auto transform transition`}
+                className={`px-8 py-3 rounded-lg font-semibold shadow-lg transform transition ${
+                  activeTab === "login"
+                    ? "bg-white text-purple-900 border-2 border-purple-900"
+                    : "bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:from-purple-600 hover:to-purple-800"
+                }`}
                 whileHover={{ scale: 1.05, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)" }}
               >
                 Log In
               </motion.button>
               <motion.button
                 onClick={handleRegisterClick}
-                className={`${activeTab === "register" ? "bg-white text-purple-700" : "bg-transparent border-2 border-white text-white hover:bg-white/10"} px-8 py-3 rounded-lg font-semibold w-full md:w-auto transform transition`}
+                className={`px-8 py-3 rounded-lg font-semibold shadow-lg transform transition ${
+                  activeTab === "register"
+                    ? "bg-white text-purple-900 border-2 border-purple-900"
+                    : "bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:from-purple-600 hover:to-purple-800"
+                }`}
                 whileHover={{ scale: 1.05, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)" }}
               >
                 Create Account
@@ -187,29 +206,59 @@ const Main = () => {
         </div>
 
         {/* Right Side - Form Container */}
-        <motion.div 
-          className="w-full md:w-1/2 flex items-center justify-center p-4 md:p-8 bg-gray-50"
+        <motion.div
+          className="w-full lg:w-1/2 flex items-center justify-center p-6 bg-white lg:bg-gradient-to-b lg:from-purple-50 lg:to-white lg:shadow-2xl lg:shadow-purple-100"
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
         >
-          {activeTab === "login" ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-            >
-              <Login />
-            </motion.div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-            >
-              <Register />
-            </motion.div>
-          )}
+          <div className="w-full max-w-md lg:p-8">
+           
+
+            {/* Tab Selector for Mobile View */}
+            <div className="mb-6 lg:hidden">
+              <div className="bg-purple-100 p-1 rounded-lg flex">
+                <button
+                  onClick={handleLoginClick}
+                  className={`flex-1 py-2 rounded-md text-center transition-all ${
+                    activeTab === "login"
+                      ? "bg-white text-purple-900 shadow-sm font-medium"
+                      : "text-purple-600"
+                  }`}
+                >
+                  Login
+                </button>
+                <button
+                  onClick={handleRegisterClick}
+                  className={`flex-1 py-2 rounded-md text-center transition-all ${
+                    activeTab === "register"
+                      ? "bg-white text-purple-900 shadow-sm font-medium"
+                      : "text-purple-600"
+                  }`}
+                >
+                  Register
+                </button>
+              </div>
+            </div>
+
+            {activeTab === "login" ? (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+              >
+                <Login />
+              </motion.div>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+              >
+                <Register />
+              </motion.div>
+            )}
+          </div>
         </motion.div>
       </div>
     </div>
