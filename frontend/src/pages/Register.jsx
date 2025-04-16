@@ -111,7 +111,7 @@ const Register = () => {
       });
       
       setTimeout(() => {
-        navigate("/main/login");
+        navigate("/main");
       }, 2000);
       
     } catch (error) {
