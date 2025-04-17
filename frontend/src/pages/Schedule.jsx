@@ -101,7 +101,7 @@ const customStyles = `
   
   /* Custom toolbar buttons */
   .custom-toolbar-btn {
-    background: linear-gradient(135deg, #9f7aea, #805ad5);
+    background: linear-gradient(135deg,rgb(193, 169, 240),rgb(160, 154, 178));
     color: white;
     border: none;
     transition: all 0.3s ease;

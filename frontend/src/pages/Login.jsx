@@ -135,12 +135,12 @@ const Login = () => {
            
             <p className="text-violet-900  mb-6">Log in to access your dashboard</p>
             <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Email Field */}
+      
           <div>
             <div className={`flex items-center rounded-lg border ${
               errors.email ? "border-red-400" : "border-gray-200 focus-within:border-violet-500"
             } px-4 py-3 transition-colors duration-200`}>
-              <Mail className="h-5 w-5 text-gray-400" />
+              <Mail className="h-5 w-5 text-violet-800" />
               <input
                 type="email"
                 name="email"
@@ -161,7 +161,7 @@ const Login = () => {
             <div className={`flex items-center rounded-lg border ${
               errors.password ? "border-red-400" : "border-gray-200 focus-within:border-violet-500"
             } px-4 py-3 transition-colors duration-200`}>
-              <Lock className="h-5 w-5 text-gray-400" />
+              <Lock className="h-5 w-5 text-violet-800" />
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
@@ -184,30 +184,7 @@ const Login = () => {
             )}
           </div>
 
-          {/* Remember Me & Forgot Password */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="remember-me"
-                checked={rememberMe}
-                onChange={handleRememberMe}
-                className="h-4 w-4 rounded border-gray-300 text-violet-600 focus:ring-violet-500"
-              />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-600">
-                Remember me
-              </label>
-            </div>
-            <div>
-              <button
-                type="button"
-                onClick={handleForgotPassword}
-                className="text-sm font-medium text-violet-500 hover:text-violet-700"
-              >
-                Forgot password?
-              </button>
-            </div>
-          </div>
+   
 
           {/* Submit Button */}
           <button
@@ -234,7 +211,7 @@ const Login = () => {
         </div>
       </div>
 
-      {/* SVG Wave */}
+
       
     </div>
   );

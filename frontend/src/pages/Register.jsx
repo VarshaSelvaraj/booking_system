@@ -161,7 +161,7 @@ const Register = () => {
             <div className={`flex items-center rounded-lg border ${
               errors.username ? "border-red-400" : "border-gray-200 focus-within:border-violet-500"
             } px-4 py-3 transition-colors duration-200`}>
-              <User className="h-5 w-5 text-gray-400" />
+              <User className="h-5 w-5 text-violet-800" />
               <input
                 type="text"
                 name="username"
@@ -181,7 +181,7 @@ const Register = () => {
             <div className={`flex items-center rounded-lg border ${
               errors.email ? "border-red-400" : "border-gray-200 focus-within:border-violet-500"
             } px-4 py-3 transition-colors duration-200`}>
-              <Mail className="h-5 w-5 text-gray-400" />
+              <Mail className="h-5 w-5 text-violet-800" />
               <input
                 type="email"
                 name="email"
@@ -202,7 +202,7 @@ const Register = () => {
             <div className={`flex items-center rounded-lg border ${
               errors.empId ? "border-red-400" : "border-gray-200 focus-within:border-violet-500"
             } px-4 py-3 transition-colors duration-200`}>
-              <BadgeCheck className="h-5 w-5 text-gray-400" />
+              <BadgeCheck className="h-5 w-5 text-violet-800" />
               <input
                 type="text"
                 name="empId"
@@ -222,7 +222,7 @@ const Register = () => {
             <div className={`flex items-center rounded-lg border ${
               errors.designation ? "border-red-400" : "border-gray-200 focus-within:border-violet-500"
             } px-4 py-3 transition-colors duration-200`}>
-              <Briefcase className="h-5 w-5 text-gray-400" />
+              <Briefcase className="h-5 w-5 text-violet-800" />
               <select
                 name="designation"
                 value={formData.designation}
@@ -231,7 +231,7 @@ const Register = () => {
               >
                 <option value="">Select Designation</option>
                 {designationOptions.map((option) => (
-                  <option key={option} value={option}>
+                  <option key={option}  value={option}>
                     {option}
                   </option>
                 ))}
@@ -247,7 +247,7 @@ const Register = () => {
             <div className={`flex items-center rounded-lg border ${
               errors.password ? "border-red-400" : "border-gray-200 focus-within:border-violet-500"
             } px-4 py-3 transition-colors duration-200`}>
-              <Lock className="h-5 w-5 text-gray-400" />
+              <Lock className="h-5 w-5 text-violet-800" />
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
@@ -268,13 +268,11 @@ const Register = () => {
               <span className="mt-1 block text-xs text-red-500">{errors.password}</span>
             )}
           </div>
-
-          {/* Confirm Password Field */}
           <div>
             <div className={`flex items-center rounded-lg border ${
               errors.confirmPassword ? "border-red-400" : "border-gray-200 focus-within:border-violet-500"
             } px-4 py-3 transition-colors duration-200`}>
-              <Lock className="h-5 w-5 text-gray-400" />
+              <Lock className="h-5 w-5 text-violet-800" />
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 name="confirmPassword"

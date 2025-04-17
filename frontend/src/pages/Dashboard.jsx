@@ -231,6 +231,7 @@ const Dashboard = () => {
 
                 <button
                   onClick={handleLogout}
+                  style={{ backgroundImage: 'linear-gradient(135deg,rgb(198, 183, 212), #9333ea)' }}
                   className="flex items-center justify-center space-x-2 w-full px-4 py-3 mt-2 text-white font-medium rounded-lg bg-purple-600 hover:bg-purple-700 transition duration-300 shadow-sm"
                 >
                   <svg
