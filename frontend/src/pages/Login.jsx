@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -11,8 +11,6 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
-
-
 
   const validate = () => {
     const newErrors = {};
@@ -70,10 +68,6 @@ const Login = () => {
         }
       );
       const token = res.data.token;
-
-      
-
-   
       Swal.fire({
         icon: "success",
         title: "Login Successful",
@@ -103,15 +97,9 @@ const Login = () => {
 
  
   return (
-    <div className="relative min-h-screen flex flex-col justify-center items-center e text-center overflow-hidden">
-      {/* Transparent Navigation Bar */}
-
-      {/* Content Section */}
+    <div >
       <div className="z-10 px-4 mt-20 w-auto max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-center gap-8 p-8 ">
-          {/* Image on the Left */}
-
-          {/* Form on the Right */}
           <div className="w-auto  text-left">
             <h2 className="text-xl md:text-3xl font-extrabold text-violet-900 mb-2">
               Welcome Back!

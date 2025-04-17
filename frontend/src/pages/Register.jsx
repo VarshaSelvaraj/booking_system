@@ -121,8 +121,9 @@ const Register = () => {
       });
 
       setTimeout(() => {
-        navigate("/main");
+        navigate("/main", { state: { activeTab: "login" } });
       }, 2000);
+      
     } catch (error) {
       console.error("Registration error:", error);
       Swal.fire({
@@ -147,14 +148,9 @@ const Register = () => {
 
   return (
     <div>
-      {/* Transparent Navigation Bar */}
-
-      {/* Content Section */}
       <div className="z-10 px-4 mt-20 w-auto max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-center gap-8   ">
-          {/* Image on the Left */}
-
-          {/* Form on the Right */}
+  
           <div className="w-auto text-left">
             <h2 className="text-xl md:text-3xl font-extrabold text-violet-900  mb-2">
               Create Your Account

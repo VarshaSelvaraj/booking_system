@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
 import axios from "axios";
 import { motion } from "framer-motion";
 
 const Main = () => {
-  const [activeTab, setActiveTab] = useState("login");
+  const location = useLocation();
+  
+  const activeTabFromRegister = location.state?.activeTab;
+  const [activeTab, setActiveTab] = useState(activeTabFromRegister || "login");
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  
 
   // Fetch upcoming events when component mounts
   useEffect(() => {
@@ -61,7 +65,11 @@ const Main = () => {
     };
     fetchEvents();
   }, []);
-
+  useEffect(() => {
+    if (location.state?.activeTab) {
+      setActiveTab(location.state.activeTab);
+    }
+  }, [location.state]);
   const handleLoginClick = () => {
     setActiveTab("login");
   };
@@ -77,7 +85,7 @@ const Main = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-100 to-white overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white overflow-hidden">
       {/* Mobile Header */}
       <div className="lg:hidden bg-gradient-to-b from-purple-400 via-purple-300 to-purple-200 text-white p-4 flex justify-between items-center sticky top-0 z-30 shadow-md">
         <h1 className="text-xl font-bold">JEvents</h1>
@@ -114,7 +122,6 @@ const Main = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            {/* Brand & Title - Hidden on mobile if header is shown */}
             <motion.div
               className="hidden lg:block mb-8"
               initial={{ opacity: 0 }}
@@ -124,7 +131,7 @@ const Main = () => {
               <h1 className="text-4xl md:text-5xl text-purple-900 font-extrabold">
                 JEvents
               </h1>
-              <div className="h-1 w-20 bg-gradient-to-r from-purple-400 to-purple-600 mt-3 mb-6"></div>
+              <div className="h-1 w-20 bg-gradient-to-r from-purple-900 to-purple-300 mt-3 mb-6"></div>
             </motion.div>
 
             <motion.p
@@ -187,7 +194,7 @@ const Main = () => {
                       <div className="mt-2 text-xs inline-block bg-purple-100 px-3 py-1 rounded-full text-purple-800">
                         {formatDate(event.date)}
                       </div>
-                      <p className="text-sm font-medium text-violet-600 mt-1">
+                      <p className="text-sm font-medium text-violet-900 mt-1">
                         {event.time_slot}
                       </p>
                     </motion.div>
@@ -220,7 +227,7 @@ const Main = () => {
               )}
             </motion.div>
 
-            {/* Desktop Action Buttons - Hidden on mobile */}
+            {/* Desktop */}
             <motion.div
               className="hidden lg:flex space-x-4"
               initial={{ opacity: 0 }}
@@ -232,7 +239,7 @@ const Main = () => {
                 className={`px-8 py-3 rounded-lg font-semibold shadow-lg transform transition ${
                   activeTab === "login"
                     ? "bg-white text-purple-900 border-2 border-purple-900"
-                    : "bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:from-purple-600 hover:to-purple-800"
+                    : "bg-gradient-to-r from-purple-400 to-purple-300 text-white hover:from-purple-500 hover:to-purple-600"
                 }`}
                 whileHover={{
                   scale: 1.05,
@@ -246,7 +253,7 @@ const Main = () => {
                 className={`px-8 py-3 rounded-lg font-semibold shadow-lg transform transition ${
                   activeTab === "register"
                     ? "bg-white text-purple-900 border-2 border-purple-900"
-                    : "bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:from-purple-600 hover:to-purple-800"
+                    : "bg-gradient-to-r from-purple-400 to-purple-300 text-white hover:from-purple-500 hover:to-purple-600"
                 }`}
                 whileHover={{
                   scale: 1.05,
@@ -259,15 +266,14 @@ const Main = () => {
           </motion.div>
         </div>
 
-        {/* Right Side - Form Container */}
+        {/* Form Container */}
         <motion.div
-          className="w-full lg:w-1/2 flex items-center justify-center p-6 bg-white lg:bg-gradient-to-b lg:from-purple-50 lg:to-white lg:shadow-2xl lg:shadow-purple-100"
+          className="w-full lg:w-1/2 flex items-center justify-center p-6 bg-white lg:bg-gradient-to-b lg:from-white lg:to-white lg:shadow-2xl lg:shadow-purple-100"
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
         >
           <div className="w-full max-w-md lg:p-8">
-            {/* Tab Selector for Mobile View */}
             <div className="mb-6 lg:hidden">
               <div className="bg-purple-100 p-1 rounded-lg flex">
                 <button

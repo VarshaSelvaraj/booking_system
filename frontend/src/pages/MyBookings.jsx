@@ -137,7 +137,6 @@ const MyBookings = () => {
 
   return (
     <div className="relative">
-      {/* Main Content - using transparent background */}
       <div
         className={`transition-all duration-300 ${
           selectedBooking ? "blur-sm pointer-events-none select-none" : ""
@@ -466,8 +465,6 @@ const MyBookings = () => {
                   </p>
                 </div>
               </div>
-
-              {/* Event Description */}
               {selectedBooking.events.description && (
                 <div className="bg-white p-5 rounded-xl border border-violet-100 shadow-sm">
                   <h3 className="text-lg font-semibold text-violet-900 mb-3">
@@ -544,7 +541,7 @@ const MyBookings = () => {
                       d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                     />
                   </svg>
-                  Cancellation Closed (Less than 10 hours to event)
+                  Cancellation Closed 
                 </button>
               )}
             </div>
