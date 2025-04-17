@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
 import axios from "axios";
@@ -7,14 +7,13 @@ import { motion } from "framer-motion";
 
 const Main = () => {
   const location = useLocation();
-  
+
   const activeTabFromRegister = location.state?.activeTab;
   const [activeTab, setActiveTab] = useState(activeTabFromRegister || "login");
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  
 
   // Fetch upcoming events when component mounts
   useEffect(() => {

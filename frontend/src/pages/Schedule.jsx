@@ -22,7 +22,6 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-
 const customStyles = `
   /* Main calendar container */
   .rbc-calendar {
@@ -159,7 +158,7 @@ const Schedule = () => {
         const calendarEvents = res.data
           .map((booking) => {
             try {
-              const startTime = booking.events.time_slot.split(" - ")[0]; 
+              const startTime = booking.events.time_slot.split(" - ")[0];
               const endTime =
                 booking.events.time_slot.split(" - ")[1] ||
                 format(
@@ -247,7 +246,7 @@ const Schedule = () => {
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth();
 
-    // Generate array of months 
+    // Generate array of months
     const options = [];
     for (let year = currentYear - 1; year <= currentYear + 1; year++) {
       for (let month = 0; month < 12; month++) {

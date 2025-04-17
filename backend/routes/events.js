@@ -126,8 +126,8 @@ router.post("/enroll", async (req, res) => {
 });
 
 router.get("/my-bookings", authenticateToken, async (req, res) => {
-  const userId = req.user.id; // Get the user ID from the token
-  console.log("User ID:", userId); // Log the user ID
+  const userId = req.user.id; 
+  console.log("User ID:", userId); 
   try {
     const { data, error } = await supabase
       .from("bookings")
@@ -136,11 +136,11 @@ router.get("/my-bookings", authenticateToken, async (req, res) => {
         booking_id,
         booking_date,
         booking_status,
-        events(event_title, date, time_slot, venue)
+        events(event_title, date, time_slot, venue, contact_mail)
       `
-      ) // Join with events to get event details
+      ) 
       .eq("user_id", userId)
-      .eq("booking_status", "Confirmed"); // Only get confirmed bookings;
+      .eq("booking_status", "Confirmed"); 
 
     if (error) {
       console.error("Error fetching bookings:", error.message);

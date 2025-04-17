@@ -294,9 +294,7 @@ const MyBookings = () => {
       {/* Modal */}
       {detailsModalOpen && selectedBooking && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50">
-          {/* Modal Container */}
           <div className="bg-white rounded-2xl shadow-lg w-full max-w-2xl p-6 relative animate-fadeIn overflow-hidden mx-4">
-            {/* Close Button */}
             <button
               className="absolute top-4 right-4 text-gray-500 hover:text-violet-400 transition-colors duration-300 p-1 rounded-full hover:bg-gray-100"
               onClick={closeModal}
@@ -317,9 +315,7 @@ const MyBookings = () => {
               </svg>
             </button>
 
-            {/* Modal Content */}
             <div className="space-y-5">
-              {/* Event Title */}
               <h2 className="text-2xl font-bold text-violet-900">
                 {selectedBooking.events.event_title}
               </h2>
@@ -438,7 +434,7 @@ const MyBookings = () => {
                     </svg>
                     <span>
                       <span className="font-medium">Contact:</span> <br />
-                      {selectedBooking.events.contact_mail || "Not provided"}
+                      {selectedBooking.events.contact_mail}
                     </span>
                   </p>
                   <p className="text-gray-700 flex items-start">
@@ -541,7 +537,7 @@ const MyBookings = () => {
                       d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                     />
                   </svg>
-                  Cancellation Closed 
+                  Cancellation Closed
                 </button>
               )}
             </div>

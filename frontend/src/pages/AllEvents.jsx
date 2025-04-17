@@ -448,7 +448,7 @@ const AllEvents = () => {
                 </div>
               </div>
 
-              {/* Event Details */}
+           
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-violet-50 p-5 rounded-xl">
                 <div className="space-y-3">
                   <p className="text-gray-700 flex items-start">
