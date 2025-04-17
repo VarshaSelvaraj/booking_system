@@ -14,7 +14,7 @@ router.post("/register", async (req, res) => {
     return res.status(400).json({ message: "All fields are required" });
   }
 
-  // 🔽 Normalize username to lowercase
+  // Normalize username to lowercase
   username = username.toLowerCase();
 
   try {
@@ -46,7 +46,7 @@ router.post("/register", async (req, res) => {
     // Insert user
     const { error: insertError } = await supabase.from("users").insert([
       {
-        username, // already lowercase
+        username, 
         email,
         empid: empId,
         designation,
