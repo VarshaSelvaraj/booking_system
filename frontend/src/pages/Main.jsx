@@ -16,35 +16,45 @@ const Main = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/auth/getevents`);
-        console.log('API Response:', res.data);
-        
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/auth/getevents`
+        );
+        console.log("API Response:", res.data);
+
         if (Array.isArray(res.data)) {
           const today = new Date();
-          const futureEvents = res.data.filter(event => new Date(event.date) > today);
-          
-          const filteredEvents = futureEvents.filter(event => {
+          const futureEvents = res.data.filter(
+            (event) => new Date(event.date) > today
+          );
+
+          const filteredEvents = futureEvents.filter((event) => {
             const timeSlot = event.time_slot;
-            const endTime = timeSlot.split(' - ')[1];
-            const [time, modifier] = endTime.split(' ');
-            const [hours, minutes] = time.split(':').map(Number);
-  
+            const endTime = timeSlot.split(" - ")[1];
+            const [time, modifier] = endTime.split(" ");
+            const [hours, minutes] = time.split(":").map(Number);
+
             const endDate = new Date();
-            endDate.setHours(modifier === 'PM' && hours !== 12 ? hours + 12 : hours);
+            endDate.setHours(
+              modifier === "PM" && hours !== 12 ? hours + 12 : hours
+            );
             endDate.setMinutes(minutes);
             endDate.setSeconds(0);
-            endDate.setFullYear(new Date(event.date).getFullYear(), new Date(event.date).getMonth(), new Date(event.date).getDate());
-            
+            endDate.setFullYear(
+              new Date(event.date).getFullYear(),
+              new Date(event.date).getMonth(),
+              new Date(event.date).getDate()
+            );
+
             return endDate > today;
           });
-  
+
           setUpcomingEvents(filteredEvents.slice(0, 3));
         } else {
-          setError('Unexpected response format');
+          setError("Unexpected response format");
         }
       } catch (err) {
-        console.error('Fetch error:', err);
-        setError('Failed to load events');
+        console.error("Fetch error:", err);
+        setError("Failed to load events");
       } finally {
         setLoading(false);
       }
@@ -62,7 +72,7 @@ const Main = () => {
 
   // Format date for display
   const formatDate = (dateString) => {
-    const options = { month: 'short', day: 'numeric', year: 'numeric' };
+    const options = { month: "short", day: "numeric", year: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
@@ -74,13 +84,21 @@ const Main = () => {
         <div className="flex space-x-2">
           <button
             onClick={handleLoginClick}
-            className={`px-3 py-1 rounded-lg text-sm ${activeTab === "login" ? "bg-white text-purple-600" : "bg-transparent border border-white"}`}
+            className={`px-3 py-1 rounded-lg text-sm ${
+              activeTab === "login"
+                ? "bg-white text-purple-600"
+                : "bg-transparent border border-white"
+            }`}
           >
             Login
           </button>
           <button
             onClick={handleRegisterClick}
-            className={`px-3 py-1 rounded-lg text-sm ${activeTab === "register" ? "bg-white text-purple-600" : "bg-transparent border border-white"}`}
+            className={`px-3 py-1 rounded-lg text-sm ${
+              activeTab === "register"
+                ? "bg-white text-purple-600"
+                : "bg-transparent border border-white"
+            }`}
           >
             Register
           </button>
@@ -97,7 +115,7 @@ const Main = () => {
             transition={{ duration: 0.8 }}
           >
             {/* Brand & Title - Hidden on mobile if header is shown */}
-            <motion.div 
+            <motion.div
               className="hidden lg:block mb-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -127,10 +145,23 @@ const Main = () => {
               transition={{ delay: 0.6, duration: 0.8 }}
             >
               <div className="flex items-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-violet-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 mr-2 text-violet-900"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
                 </svg>
-                <h2 className="text-2xl font-semibold text-violet-900">Upcoming Events</h2>
+                <h2 className="text-2xl font-semibold text-violet-900">
+                  Upcoming Events
+                </h2>
               </div>
 
               {loading ? (
@@ -150,11 +181,15 @@ const Main = () => {
                       transition={{ delay: 0.2 * (index + 1), duration: 0.5 }}
                       whileHover={{ scale: 1.03 }}
                     >
-                      <h3 className="font-bold text-lg text-purple-900">{event.event_title}</h3>
+                      <h3 className="font-bold text-lg text-purple-900">
+                        {event.event_title}
+                      </h3>
                       <div className="mt-2 text-xs inline-block bg-purple-100 px-3 py-1 rounded-full text-purple-800">
                         {formatDate(event.date)}
                       </div>
-                      <p className="text-sm font-medium text-violet-600 mt-1">{event.time_slot}</p>
+                      <p className="text-sm font-medium text-violet-600 mt-1">
+                        {event.time_slot}
+                      </p>
                     </motion.div>
                   ))}
                 </div>
@@ -164,10 +199,23 @@ const Main = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-purple-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-12 w-12 mx-auto text-purple-300 mb-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
-                  <p className="text-purple-900">No upcoming events to display.</p>
+                  <p className="text-purple-900">
+                    No upcoming events to display.
+                  </p>
                 </motion.div>
               )}
             </motion.div>
@@ -186,7 +234,10 @@ const Main = () => {
                     ? "bg-white text-purple-900 border-2 border-purple-900"
                     : "bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:from-purple-600 hover:to-purple-800"
                 }`}
-                whileHover={{ scale: 1.05, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)" }}
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+                }}
               >
                 Log In
               </motion.button>
@@ -197,7 +248,10 @@ const Main = () => {
                     ? "bg-white text-purple-900 border-2 border-purple-900"
                     : "bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:from-purple-600 hover:to-purple-800"
                 }`}
-                whileHover={{ scale: 1.05, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)" }}
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+                }}
               >
                 Create Account
               </motion.button>
@@ -213,8 +267,6 @@ const Main = () => {
           transition={{ duration: 0.8 }}
         >
           <div className="w-full max-w-md lg:p-8">
-           
-
             {/* Tab Selector for Mobile View */}
             <div className="mb-6 lg:hidden">
               <div className="bg-purple-100 p-1 rounded-lg flex">

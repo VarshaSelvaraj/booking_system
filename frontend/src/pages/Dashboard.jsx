@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import AllEvents from './AllEvents';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import MyBookings from './MyBookings';
-import Schedule from './Schedule';
+import React, { useEffect, useState } from "react";
+import AllEvents from "./AllEvents";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import MyBookings from "./MyBookings";
+import Schedule from "./Schedule";
 
 const Dashboard = () => {
-  const [activeTab, setActiveTab] = useState('upcoming');
+  const [activeTab, setActiveTab] = useState("upcoming");
   const [user, setUser] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
@@ -18,8 +18,8 @@ const Dashboard = () => {
         setUser(response.data.user);
       })
       .catch((error) => {
-        console.error('Error fetching user data:', error);
-        navigate('/main');
+        console.error("Error fetching user data:", error);
+        navigate("/main");
       });
   }, [navigate]);
 
@@ -30,15 +30,15 @@ const Dashboard = () => {
         {},
         { withCredentials: true }
       );
-      navigate('/main');
+      navigate("/main");
     } catch (error) {
-      console.error('Error during logout:', error);
+      console.error("Error during logout:", error);
     }
   };
 
   const handleBack = () => {
     handleLogout();
-    navigate('/main');
+    navigate("/main");
   };
 
   if (!user) {
@@ -57,38 +57,70 @@ const Dashboard = () => {
     string.charAt(0).toUpperCase() + string.slice(1);
 
   const tabs = [
-    { 
-      key: 'upcoming', 
-      label: 'Upcoming Events',
+    {
+      key: "upcoming",
+      label: "Upcoming Events",
       icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+          />
         </svg>
-      )
+      ),
     },
-    { 
-      key: 'enrolled', 
-      label: 'My Bookings',
+    {
+      key: "enrolled",
+      label: "My Bookings",
       icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M5 13l4 4L19 7"
+          />
         </svg>
-      )
+      ),
     },
-    { 
-      key: 'schedule', 
-      label: 'Schedule',
+    {
+      key: "schedule",
+      label: "Schedule",
       icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
         </svg>
-      )
+      ),
     },
   ];
-  
+
   return (
     <div className="min-h-screen ">
-  
       {/* Mobile Header */}
       <div className="lg:hidden bg-gradient-to-b from-purple-400 via-purple-300 to-purple-200 text-white p-4 flex justify-between items-center sticky top-0 z-30 shadow-md">
         <button
@@ -111,12 +143,9 @@ const Dashboard = () => {
           </svg>
         </button>
         <h1 className="text-xl font-bold">
-          {tabs.find(tab => tab.key === activeTab)?.label || 'Dashboard'}
+          {tabs.find((tab) => tab.key === activeTab)?.label || "Dashboard"}
         </h1>
-        <button
-          onClick={handleBack}
-          className="text-white focus:outline-none"
-        >
+        <button onClick={handleBack} className="text-white focus:outline-none">
           <svg
             className="w-6 h-6"
             fill="none"
@@ -138,7 +167,7 @@ const Dashboard = () => {
         {/* Sidebar - Mobile */}
         {sidebarOpen && (
           <div className="lg:hidden fixed inset-0 z-40">
-            <div 
+            <div
               className="absolute inset-0 bg-black bg-opacity-50"
               onClick={() => setSidebarOpen(false)}
             ></div>
@@ -173,10 +202,23 @@ const Dashboard = () => {
                 </div>
                 <div className="border-b border-purple-400 mb-6 pb-6">
                   <div className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-purple-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 mr-2 text-purple-200"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                      />
                     </svg>
-                    <span className="text-purple-100 text-sm">{user.email}</span>
+                    <span className="text-purple-100 text-sm">
+                      {user.email}
+                    </span>
                   </div>
                 </div>
                 <ul className="space-y-2">
@@ -189,15 +231,15 @@ const Dashboard = () => {
                       }}
                       className={`cursor-pointer px-4 py-3 rounded-lg flex items-center gap-3 transition-all ${
                         activeTab === tab.key
-                          ? 'bg-white text-purple-600 font-semibold shadow-md'
-                          : 'hover:bg-purple-400'
+                          ? "bg-white text-purple-600 font-semibold shadow-md"
+                          : "hover:bg-purple-400"
                       }`}
                     >
                       <span
                         className={`${
                           activeTab === tab.key
-                            ? 'text-purple-600'
-                            : 'text-purple-100'
+                            ? "text-purple-600"
+                            : "text-purple-100"
                         }`}
                       >
                         {tab.icon}
@@ -231,7 +273,10 @@ const Dashboard = () => {
 
                 <button
                   onClick={handleLogout}
-                  style={{ backgroundImage: 'linear-gradient(135deg,rgb(198, 183, 212), #9333ea)' }}
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(135deg,rgb(198, 183, 212), #9333ea)",
+                  }}
                   className="flex items-center justify-center space-x-2 w-full px-4 py-3 mt-2 text-white font-medium rounded-lg bg-purple-600 hover:bg-purple-700 transition duration-300 shadow-sm"
                 >
                   <svg
@@ -258,7 +303,6 @@ const Dashboard = () => {
         {/* Sidebar - Desktop */}
         <div className="hidden lg:flex lg:flex-col w-72 h-screen sticky top-0 bg-gradient-to-b from-purple-100 via-purple-150 to-purple-200 text-white shadow-lg">
           <div className="p-6 flex-1">
-          
             <button
               onClick={handleBack}
               className="flex items-center space-x-2 mb-7 text-white hover:text-purple-200 transition duration-300"
@@ -301,15 +345,15 @@ const Dashboard = () => {
                     onClick={() => setActiveTab(tab.key)}
                     className={`cursor-pointer px-4 py-3 rounded-lg flex items-center gap-3 transition-all ${
                       activeTab === tab.key
-                        ? 'bg-white text-purple-600 font-semibold shadow-md'
-                        : 'hover:bg-purple-400 text-purple-900'
+                        ? "bg-white text-purple-600 font-semibold shadow-md"
+                        : "hover:bg-purple-400 text-purple-900"
                     }`}
                   >
                     <span
                       className={`${
                         activeTab === tab.key
-                          ? 'text-purple-600'
-                          : 'text-purple-900'
+                          ? "text-purple-600"
+                          : "text-purple-900"
                       }`}
                     >
                       {tab.icon}
@@ -324,7 +368,10 @@ const Dashboard = () => {
           <div className="p-6 border-t border-purple-400">
             <button
               onClick={handleLogout}
-              style={{ backgroundImage: 'linear-gradient(135deg,rgb(198, 183, 212), #9333ea)' }}
+              style={{
+                backgroundImage:
+                  "linear-gradient(135deg,rgb(198, 183, 212), #9333ea)",
+              }}
               className="flex items-center justify-center space-x-2 w-full px-4 py-3 text-white font-medium rounded-lg transition duration-300 shadow-md transform hover:scale-105"
             >
               <svg
@@ -345,14 +392,14 @@ const Dashboard = () => {
             </button>
           </div>
         </div>
-        
+
         {/* Main Content Area */}
         <div className="flex-1 min-h-screen">
           <div className="max-w-8xl mx-auto p-4 lg:p-6">
             <div className="">
-              {activeTab === 'upcoming' && <AllEvents />}
-              {activeTab === 'enrolled' && <MyBookings />}
-              {activeTab === 'schedule' && <Schedule />}
+              {activeTab === "upcoming" && <AllEvents />}
+              {activeTab === "enrolled" && <MyBookings />}
+              {activeTab === "schedule" && <Schedule />}
             </div>
           </div>
         </div>

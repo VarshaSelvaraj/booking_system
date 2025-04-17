@@ -12,14 +12,7 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
 
-  // Check for saved email on component mount
-  useEffect(() => {
-    const savedEmail = localStorage.getItem("rememberedEmail");
-    if (savedEmail) {
-      setFormData(prev => ({ ...prev, email: savedEmail }));
-      setRememberMe(true);
-    }
-  }, []);
+
 
   const validate = () => {
     const newErrors = {};
@@ -73,27 +66,20 @@ const Login = () => {
         `${import.meta.env.VITE_API_URL}/auth/login`,
         formData,
         {
-          withCredentials: true, 
+          withCredentials: true,
         }
       );
       const token = res.data.token;
 
-      // Store token in localStorage
-      localStorage.setItem("authToken", token);
       
-      // Handle remember me
-      if (rememberMe) {
-        localStorage.setItem("rememberedEmail", formData.email);
-      } else {
-        localStorage.removeItem("rememberedEmail");
-      }
 
+   
       Swal.fire({
         icon: "success",
         title: "Login Successful",
-        iconColor: '#8B5CF6',
+        iconColor: "#8B5CF6",
         text: "Redirecting to dashboard...",
-        confirmButtonColor: '#8B5CF6',
+        confirmButtonColor: "#8B5CF6",
         timer: 1500,
         showConfirmButton: false,
       });
@@ -106,113 +92,131 @@ const Login = () => {
       Swal.fire({
         icon: "error",
         title: "Login Failed",
-        text: error.response?.data?.message || "Invalid credentials. Please try again.",
+        text:
+          error.response?.data?.message ||
+          "Invalid credentials. Please try again.",
       });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleForgotPassword = () => {
-    navigate("/forgot-password");
-  };
-
+ 
   return (
     <div className="relative min-h-screen flex flex-col justify-center items-center e text-center overflow-hidden">
       {/* Transparent Navigation Bar */}
-      
 
       {/* Content Section */}
       <div className="z-10 px-4 mt-20 w-auto max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-center gap-8 p-8 ">
           {/* Image on the Left */}
-        
+
           {/* Form on the Right */}
           <div className="w-auto  text-left">
             <h2 className="text-xl md:text-3xl font-extrabold text-violet-900 mb-2">
               Welcome Back!
             </h2>
-           
-            <p className="text-violet-900  mb-6">Log in to access your dashboard</p>
+
+            <p className="text-violet-900  mb-6">
+              Log in to access your dashboard
+            </p>
             <form onSubmit={handleSubmit} className="space-y-5">
-      
-          <div>
-            <div className={`flex items-center rounded-lg border ${
-              errors.email ? "border-red-400" : "border-gray-200 focus-within:border-violet-500"
-            } px-4 py-3 transition-colors duration-200`}>
-              <Mail className="h-5 w-5 text-violet-800" />
-              <input
-                type="email"
-                name="email"
-                placeholder="Your Email"
-                value={formData.email}
-                onChange={handleChange}
-                className="ml-3 w-full bg-transparent text-gray-700 outline-none placeholder:text-gray-400"
-                autoComplete="email"
-              />
-            </div>
-            {errors.email && (
-              <span className="mt-1 block text-xs text-red-500">{errors.email}</span>
-            )}
-          </div>
+              <div>
+                <div
+                  className={`flex items-center rounded-lg border ${
+                    errors.email
+                      ? "border-red-400"
+                      : "border-gray-200 focus-within:border-violet-500"
+                  } px-4 py-3 transition-colors duration-200`}
+                >
+                  <Mail className="h-5 w-5 text-violet-800" />
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Your Email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="ml-3 w-full bg-transparent text-gray-700 outline-none placeholder:text-gray-400"
+                    autoComplete="email"
+                  />
+                </div>
+                {errors.email && (
+                  <span className="mt-1 block text-xs text-red-500">
+                    {errors.email}
+                  </span>
+                )}
+              </div>
 
-          {/* Password Field */}
-          <div>
-            <div className={`flex items-center rounded-lg border ${
-              errors.password ? "border-red-400" : "border-gray-200 focus-within:border-violet-500"
-            } px-4 py-3 transition-colors duration-200`}>
-              <Lock className="h-5 w-5 text-violet-800" />
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-                className="ml-3 w-full bg-transparent text-gray-700 outline-none placeholder:text-gray-400"
-                autoComplete="current-password"
-              />
-              <button 
-                type="button" 
-                onClick={togglePasswordVisibility}
-                className="focus:outline-none"
+              {/* Password Field */}
+              <div>
+                <div
+                  className={`flex items-center rounded-lg border ${
+                    errors.password
+                      ? "border-red-400"
+                      : "border-gray-200 focus-within:border-violet-500"
+                  } px-4 py-3 transition-colors duration-200`}
+                >
+                  <Lock className="h-5 w-5 text-violet-800" />
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="ml-3 w-full bg-transparent text-gray-700 outline-none placeholder:text-gray-400"
+                    autoComplete="current-password"
+                  />
+                  <button
+                    type="button"
+                    onClick={togglePasswordVisibility}
+                    className="focus:outline-none"
+                  ></button>
+                </div>
+                {errors.password && (
+                  <span className="mt-1 block text-xs text-red-500">
+                    {errors.password}
+                  </span>
+                )}
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={loading}
+                style={{
+                  backgroundImage: "linear-gradient(135deg, #b3a0f0, #a77bde)",
+                }}
+                className="flex w-full items-center justify-center space-x-2 rounded-lg bg-violet-600 px-4 py-3 font-medium text-white shadow transition-all duration-300 hover:bg-violet-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2"
               >
-                
+                {loading ? (
+                  <svg
+                    className="h-5 w-5 animate-spin text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                ) : (
+                  "Let's Go!"
+                )}
               </button>
-            </div>
-            {errors.password && (
-              <span className="mt-1 block text-xs text-red-500">{errors.password}</span>
-            )}
-          </div>
-
-   
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={loading}
-            
-            style={{    backgroundImage: 'linear-gradient(135deg, #b3a0f0, #a77bde)' }}
-            className="flex w-full items-center justify-center space-x-2 rounded-lg bg-violet-600 px-4 py-3 font-medium text-white shadow transition-all duration-300 hover:bg-violet-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2"          >
-            {loading ? (
-              <svg className="h-5 w-5 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-            ) : (
-              "Let's Go!"
-            )}
-          </button>
-        </form>
-        
-          
-
-            
+            </form>
           </div>
         </div>
       </div>
-
-
-      
     </div>
   );
 };

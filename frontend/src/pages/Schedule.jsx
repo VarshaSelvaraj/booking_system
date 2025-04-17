@@ -22,7 +22,7 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-// Custom CSS styles
+
 const customStyles = `
   /* Main calendar container */
   .rbc-calendar {
@@ -135,7 +135,6 @@ const Schedule = () => {
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
 
   useEffect(() => {
-    // Add custom styles to head
     const styleElement = document.createElement("style");
     styleElement.type = "text/css";
     styleElement.appendChild(document.createTextNode(customStyles));
@@ -159,9 +158,8 @@ const Schedule = () => {
 
         const calendarEvents = res.data
           .map((booking) => {
-            // Handle potential formatting issues
             try {
-              const startTime = booking.events.time_slot.split(" - ")[0]; // e.g., '10:00 AM'
+              const startTime = booking.events.time_slot.split(" - ")[0]; 
               const endTime =
                 booking.events.time_slot.split(" - ")[1] ||
                 format(
@@ -186,7 +184,6 @@ const Schedule = () => {
                 end: eventEnd,
                 resource: booking.events.description || "",
                 location: booking.events.location || "",
-                // Add custom styling based on event type if needed
                 className: booking.events.event_type
                   ? `event-${booking.events.event_type.toLowerCase()}`
                   : "event-default",
@@ -211,15 +208,13 @@ const Schedule = () => {
     fetchEvents();
   }, []);
 
-  // Custom event styling
   const eventStyleGetter = (event) => {
-    // Basic styles applied through CSS classes
     return {
       className: event.className || "event-default",
     };
   };
 
-  // Handle mouse events for custom tooltips
+  // mouse events for custom tooltips
   const handleEventMouseEnter = (event, e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     setHoveredEvent(event);
@@ -233,7 +228,6 @@ const Schedule = () => {
     setHoveredEvent(null);
   };
 
-  // Month selection dropdown
   const MonthSelector = ({ currentDate, onSelectMonth }) => {
     const months = [
       "January",
@@ -253,7 +247,7 @@ const Schedule = () => {
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth();
 
-    // Generate array of months for current year and 1 year before/after
+    // Generate array of months 
     const options = [];
     for (let year = currentYear - 1; year <= currentYear + 1; year++) {
       for (let month = 0; month < 12; month++) {
@@ -288,7 +282,7 @@ const Schedule = () => {
     );
   };
 
-  // Custom toolbar component with improved month navigation
+  // Custom toolbar component
   const CustomToolbar = (toolbar) => {
     const goToBack = () => {
       const newDate = subMonths(toolbar.date, 1);
@@ -375,7 +369,6 @@ const Schedule = () => {
     );
   };
 
-  // Custom event component for more details
   const EventComponent = ({ event }) => (
     <div
       className="text-xs overflow-hidden"
@@ -390,8 +383,6 @@ const Schedule = () => {
       )}
     </div>
   );
-
-  // Custom tooltip for events
   const CustomTooltip = () => {
     if (!hoveredEvent) return null;
 
@@ -453,18 +444,12 @@ const Schedule = () => {
             tooltipAccessor={null}
             onView={(newView) => setView(newView)}
             onSelectEvent={(event) => {
-              // You can add an event click handler here
               console.log("Event clicked:", event);
-              // Option to navigate to event details page or show a modal with full details
             }}
           />
-
-          {/* Custom tooltip that appears on hover */}
           {hoveredEvent && <CustomTooltip />}
         </div>
       )}
-
-      {/* Wave decoration at bottom, similar to login page */}
     </div>
   );
 };
